@@ -44,6 +44,7 @@
   .btn-primary { background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
   .btn-success { background: var(--green); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
   .form-input { width: 100%; padding: 0.5rem 0.75rem; border: 1.5px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 0.8rem; font-family: inherit; font-size: 14px; }
+  .form-input:focus { outline: none; border-color: var(--blue); }
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
   .modal-overlay.show { display: flex; }
   .modal { background: white; border-radius: var(--radius-lg); padding: 1.25rem; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
@@ -58,7 +59,6 @@
   .comm-compose-title { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; color: var(--blue); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
   .vuoto { text-align: center; padding: 16px; color: var(--gray-400); font-size: 13px; }
   .loading { text-align: center; padding: 30px; color: var(--gray-400); font-size: 13px; }
-  /* Password screen */
   .pwd-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #1a4fa3, #153d80); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 2rem; }
   .pwd-box { background: white; border-radius: 20px; padding: 2rem; width: 100%; max-width: 340px; text-align: center; }
   .pwd-title { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
@@ -75,7 +75,6 @@
   <h1 style="font-size: 50px; color: rgb(60, 4, 97); font-weight: 900; padding: 20px;">Grest 2026 ✝</h1>
 </div>
 
-<!-- SCHERMATA PASSWORD -->
 <div class="pwd-screen" id="pwd-screen">
   <div class="pwd-box">
     <div style="font-size:40px; margin-bottom:10px">✝</div>
@@ -104,7 +103,6 @@
   </div>
 
   <div class="content">
-    <!-- DASHBOARD -->
     <div class="section active" id="sec-dashboard">
       <div class="stats">
         <div class="stat"><div class="stat-label">Iscritti Totali</div><div class="stat-value" id="dash-tot">—</div></div>
@@ -120,7 +118,6 @@
       </div>
     </div>
 
-    <!-- BAMBINI -->
     <div class="section" id="sec-iscrizioni">
       <div style="display:flex; gap:8px; margin-bottom:0.6rem">
         <input type="text" id="search-input" placeholder="Cerca bambino..." class="form-input" style="margin:0" oninput="renderBambini()">
@@ -130,16 +127,14 @@
       <div id="lista-bambini"><div class="loading">Caricamento...</div></div>
     </div>
 
-    <!-- PROGRAMMA -->
     <div class="section" id="sec-programma">
       <div style="display:flex; gap:8px; margin-bottom:1rem">
         <select id="giorno-select" class="form-input" style="margin:0" onchange="renderProgramma()"></select>
         <button class="btn-primary" onclick="apriModaleAttivita()"><i class="ti ti-plus"></i></button>
       </div>
-      <div id="lista-attivita"></div>
+      <div id="lista-attivita"><div class="loading">Caricamento...</div></div>
     </div>
 
-    <!-- COMUNICAZIONI -->
     <div class="section" id="sec-comunicazioni">
       <div class="comm-compose">
         <div class="comm-compose-title"><i class="ti ti-send" style="font-size:18px"></i> Nuova Comunicazione</div>
@@ -232,19 +227,18 @@
   </div>
 </div>
 
+<!-- MODAL ATTIVITA: senza scelta colore -->
 <div class="modal-overlay" id="modal-attivita">
   <div class="modal">
-    <h2 style="margin-bottom:15px">Nuova Attività</h2>
+    <h2 style="margin-bottom:15px">➕ Nuova Attività</h2>
+    <label style="font-size:12px; font-weight:700">Orario *</label>
     <input type="time" id="att-orario" class="form-input" value="09:00">
-    <input type="text" id="att-nome-input" placeholder="Nome attività" class="form-input">
-    <input type="text" id="att-det-input" placeholder="Dettagli" class="form-input">
-    <select id="att-colore" class="form-input">
-      <option value="line-blu">🔵 Blu</option>
-      <option value="line-oro">🟡 Oro</option>
-      <option value="line-verde">🟢 Verde</option>
-    </select>
-    <div style="display:flex; gap:10px">
-      <button class="btn-primary" onclick="salvaAttivita()">Salva</button>
+    <label style="font-size:12px; font-weight:700">Nome attività *</label>
+    <input type="text" id="att-nome-input" placeholder="Es: Giochi in piscina" class="form-input">
+    <label style="font-size:12px; font-weight:700">Dettagli</label>
+    <input type="text" id="att-det-input" placeholder="Es: Portare il costume" class="form-input">
+    <div style="display:flex; gap:10px; margin-top:5px">
+      <button class="btn-primary" style="flex:1" onclick="salvaAttivita()">Salva</button>
       <button onclick="chiudiModal('modal-attivita')" style="background:var(--gray-200); border:none; padding:10px; border-radius:10px; cursor:pointer">Annulla</button>
     </div>
   </div>
@@ -271,6 +265,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebas
 import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const PASSWORD = "grest2026";
+const COLORI = ["line-blu", "line-oro", "line-verde"];
 
 const firebaseConfig = {
   apiKey: "AIzaSyBLsK6_odHquTHAUy3xDSI1pqic940zUdI",
@@ -290,8 +285,8 @@ let bambinoIdInModifica = null;
 let settGruppiTemp = [];
 let settGiorniTemp = [];
 let settProgrammiTemp = [];
+let configCaricata = false;
 
-// PASSWORD
 window.verificaPwd = () => {
   const val = document.getElementById('pwd-input').value;
   if (val === PASSWORD) {
@@ -305,7 +300,6 @@ window.verificaPwd = () => {
 };
 
 function avviaFirebase() {
-  // Easter egg
   let countClicks = 0, lastClickTime = 0;
   document.getElementById('logo-icon').addEventListener('click', () => {
     const now = Date.now();
@@ -314,25 +308,45 @@ function avviaFirebase() {
     if (countClicks === 5) { countClicks = 0; toggleEgg(true); }
   });
 
+  // Bambini
   onSnapshot(collection(db, 'bambini'), snap => {
     dati.bambini = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderBambini();
     renderDashboard();
   });
 
+  // Avvisi
   onSnapshot(query(collection(db, 'avvisi'), orderBy('timestamp', 'desc')), snap => {
     dati.avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAvvisi();
     renderDashboard();
   });
 
+  // Impostazioni (gruppi, giorni, programma)
   onSnapshot(doc(db, 'impostazioni', 'config'), snap => {
     if (snap.exists()) {
       const d = snap.data();
       if (d.gruppi) dati.gruppi = d.gruppi;
       if (d.giorni) dati.giorni = d.giorni;
-      if (d.programmi) dati.programmi = d.programmi;
+      // programmi è un array di array salvato come oggetto su Firestore
+      if (d.programmi) {
+        // Supporta sia array che oggetto {0:[...], 1:[...]}
+        if (Array.isArray(d.programmi)) {
+          dati.programmi = d.programmi;
+        } else {
+          const len = dati.giorni.length;
+          dati.programmi = Array.from({length: len}, (_, i) => d.programmi[i] || []);
+        }
+      }
+    } else {
+      // Prima volta: crea il documento di config
+      setDoc(doc(db, 'impostazioni', 'config'), {
+        gruppi: dati.gruppi,
+        giorni: dati.giorni,
+        programmi: dati.programmi
+      });
     }
+    configCaricata = true;
     aggiornaSelect();
     renderProgramma();
   });
@@ -342,7 +356,7 @@ function aggiornaSelect() {
   const gSel = document.getElementById('giorno-select');
   const old = gSel.value;
   gSel.innerHTML = dati.giorni.map((g,i) => `<option value="${i}">${g}</option>`).join('');
-  if (old && old < dati.giorni.length) gSel.value = old;
+  if (old !== "" && parseInt(old) < dati.giorni.length) gSel.value = old;
   document.getElementById('b-gruppo').innerHTML = dati.gruppi.map(g => `<option>${g}</option>`).join('');
   document.getElementById('msg-dest').innerHTML = '<option>Tutti</option>' + dati.gruppi.map(g => `<option>${g}</option>`).join('');
   const filterRow = document.getElementById('filter-row');
@@ -357,6 +371,7 @@ window.showTab = (name, el) => {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('sec-'+name).classList.add('active');
   el.classList.add('active');
+  if (name === 'programma') renderProgramma();
 };
 
 window.setFilter = (f) => { currentFilter = f; aggiornaSelect(); renderBambini(); };
@@ -387,6 +402,7 @@ function renderBambini() {
         <small style="color:var(--gray-500)">${dataDisplay}${b.classe?' · '+b.classe:''}</small>
         ${b.allergie?`<div style="color:#dc2626;font-size:11px;font-weight:700;display:flex;align-items:center;gap:3px;margin-top:2px"><i class="ti ti-alert-triangle"></i> ${b.allergie}</div>`:''}
         ${b.telefono?`<div style="font-size:11px;color:var(--gray-500)">📞 ${b.telefono}</div>`:''}
+        ${b.codiceFamiglia?`<div style="font-size:10px;color:var(--gray-400)">🔑 ${b.codiceFamiglia}</div>`:''}
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
         <span class="badge">${b.gruppo||''}</span>
@@ -400,17 +416,22 @@ function renderBambini() {
 }
 
 window.renderProgramma = () => {
-  const dayIdx = document.getElementById('giorno-select').value;
-  const lista = dati.programmi[dayIdx] || [];
-  const sorted = [...lista].sort((a,b) => a.orario.localeCompare(b.orario));
+  const dayIdx = parseInt(document.getElementById('giorno-select').value) || 0;
+  const lista = (dati.programmi[dayIdx]) || [];
+  const sorted = [...lista].sort((a,b) => (a.orario||'').localeCompare(b.orario||''));
   document.getElementById('lista-attivita').innerHTML = sorted.length
-    ? sorted.map((a,i) => `<div class="attivita-card"><div style="font-size:13px;font-weight:700;color:var(--blue);min-width:40px">${a.orario}</div><div class="vert-line ${a.colore}"></div><div style="flex:1"><b>${a.nome}</b><br><small>${a.det}</small></div><button onclick="eliminaAttivita(${dayIdx},${i})" style="color:red;border:none;background:none;cursor:pointer;padding:5px">✕</button></div>`).join('')
+    ? sorted.map((a,i) => `<div class="attivita-card">
+        <div style="font-size:13px;font-weight:700;color:var(--blue);min-width:40px">${a.orario||''}</div>
+        <div class="vert-line ${a.colore||'line-blu'}"></div>
+        <div style="flex:1"><b>${a.nome||''}</b><br><small style="color:var(--gray-500)">${a.det||''}</small></div>
+        <button onclick="eliminaAttivita(${dayIdx},${i})" style="color:red;border:none;background:none;cursor:pointer;padding:5px;font-size:18px">✕</button>
+      </div>`).join('')
     : '<div class="vuoto">Nessuna attività. Aggiungine una con +</div>';
 };
 
 function renderAvvisi() {
   document.getElementById('lista-avvisi').innerHTML = dati.avvisi.length
-    ? dati.avvisi.map((a,i) => `<div class="avviso-card">
+    ? dati.avvisi.map(a => `<div class="avviso-card">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:5px">
           <b>${a.titolo}</b>
           <div style="display:flex;gap:6px;align-items:center">
@@ -441,7 +462,7 @@ window.salvaBambino = async () => {
     classe: document.getElementById('b-classe').value.trim(),
     taglia: document.getElementById('b-taglia').value,
     telefono: document.getElementById('b-telefono').value.trim(),
-    settimane, presente: false
+    settimane, presente: false, codiceFamiglia: ''
   });
   ['b-nome','b-allergie','b-indirizzo','b-classe','b-telefono'].forEach(id => document.getElementById(id).value='');
   document.getElementById('b-nascita').value=''; document.getElementById('b-nascita').type='text';
@@ -451,22 +472,23 @@ window.salvaBambino = async () => {
 };
 
 window.salvaAttivita = async () => {
-  const dayIdx = parseInt(document.getElementById('giorno-select').value);
-  const nuovi = [...(dati.programmi[dayIdx]||[]), {
-    orario: document.getElementById('att-orario').value,
-    nome: document.getElementById('att-nome-input').value,
-    det: document.getElementById('att-det-input').value,
-    colore: document.getElementById('att-colore').value
-  }];
-  const nuoviProgrammi = [...dati.programmi];
-  nuoviProgrammi[dayIdx] = nuovi;
+  const orario = document.getElementById('att-orario').value;
+  const nome = document.getElementById('att-nome-input').value.trim();
+  if (!nome) { alert("Inserisci il nome dell'attività!"); return; }
+  const dayIdx = parseInt(document.getElementById('giorno-select').value) || 0;
+  // Colore automatico in rotazione
+  const lista = dati.programmi[dayIdx] || [];
+  const colore = COLORI[lista.length % COLORI.length];
+  const nuoviProgrammi = dati.programmi.map((p, i) => i === dayIdx ? [...(p||[]), { orario, nome, det: document.getElementById('att-det-input').value.trim(), colore }] : (p||[]));
   await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: dati.gruppi, giorni: dati.giorni, programmi: nuoviProgrammi }, { merge: true });
+  document.getElementById('att-nome-input').value = '';
+  document.getElementById('att-det-input').value = '';
+  document.getElementById('att-orario').value = '09:00';
   chiudiModal('modal-attivita');
 };
 
 window.eliminaAttivita = async (dayIdx, i) => {
-  const nuovi = [...dati.programmi];
-  nuovi[dayIdx] = nuovi[dayIdx].filter((_,idx) => idx !== i);
+  const nuovi = dati.programmi.map((p, idx) => idx === dayIdx ? (p||[]).filter((_,j) => j !== i) : (p||[]));
   await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: dati.gruppi, giorni: dati.giorni, programmi: nuovi }, { merge: true });
 };
 
@@ -530,20 +552,20 @@ window.eliminaAvviso = async (id) => {
 window.apriImpostazioni = () => {
   settGruppiTemp = [...dati.gruppi];
   settGiorniTemp = [...dati.giorni];
-  settProgrammiTemp = dati.programmi.map(p => [...p]);
+  settProgrammiTemp = dati.programmi.map(p => [...(p||[])]);
   renderSettGruppi(); renderSettGiorni();
   document.getElementById('modal-impostazioni').classList.add('show');
 };
 
 window.renderSettGruppi = () => {
   document.getElementById('sett-gruppi-list').innerHTML = settGruppiTemp.map((g,i) =>
-    `<div style="display:flex;gap:5px;margin-bottom:5px"><input type="text" value="${g}" onchange="settGruppiTemp[${i}]=this.value" class="form-input" style="margin:0"><button onclick="settGruppiTemp.splice(${i},1);renderSettGruppi()" style="background:var(--red-light);color:var(--red);border:none;border-radius:8px;padding:5px 10px;cursor:pointer">✕</button></div>`
+    `<div style="display:flex;gap:5px;margin-bottom:5px"><input type="text" value="${g}" onchange="settGruppiTemp[${i}]=this.value" class="form-input" style="margin:0"><button onclick="settGruppiTemp.splice(${i},1);renderSettGruppi()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:8px;padding:5px 10px;cursor:pointer">✕</button></div>`
   ).join('');
 };
 
 window.renderSettGiorni = () => {
   document.getElementById('sett-giorni-list').innerHTML = settGiorniTemp.map((g,i) =>
-    `<div style="display:flex;gap:5px;margin-bottom:5px"><input type="text" value="${g}" onchange="settGiorniTemp[${i}]=this.value" class="form-input" style="margin:0"><button onclick="settGiorniTemp.splice(${i},1);settProgrammiTemp.splice(${i},1);renderSettGiorni()" style="background:var(--red-light);color:var(--red);border:none;border-radius:8px;padding:5px 10px;cursor:pointer">✕</button></div>`
+    `<div style="display:flex;gap:5px;margin-bottom:5px"><input type="text" value="${g}" onchange="settGiorniTemp[${i}]=this.value" class="form-input" style="margin:0"><button onclick="settGiorniTemp.splice(${i},1);settProgrammiTemp.splice(${i},1);renderSettGiorni()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:8px;padding:5px 10px;cursor:pointer">✕</button></div>`
   ).join('');
 };
 
