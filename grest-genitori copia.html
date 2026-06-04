@@ -21,7 +21,7 @@
   .header { background: linear-gradient(135deg, #1a4fa3 0%, #153d80 100%); color: white; padding: 1.1rem 1.1rem 0; position: sticky; top: 0; z-index: 50; }
   .header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 0.15rem; }
   .header h1 { font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 700; flex: 1; }
-  .badge-ruolo { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); border-radius: 8px; color: white; font-size: 11px; font-weight: 700; padding: 4px 10px; }
+  .badge-ruolo { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); border-radius: 8px; color: white; font-size: 11px; font-weight: 700; padding: 4px 10px; white-space:nowrap; }
   .tab-bar { display: flex; background: rgba(0,0,0,0.2); border-radius: 8px 8px 0 0; overflow: hidden; margin-top: 10px; }
   .tab { flex: 1; padding: 0.55rem 0.2rem; text-align: center; font-size: 11px; color: rgba(255,255,255,0.6); cursor: pointer; border-bottom: 2px solid transparent; }
   .tab i { display: block; font-size: 19px; }
@@ -36,7 +36,9 @@
   .badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; background: var(--gray-200); }
   .badge-avviso { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; background: var(--gold-light); color: var(--gold); }
   .btn-primary { background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .btn-secondary { background: var(--gray-200); color: var(--gray-700); border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; }
   .form-input { width: 100%; padding: 0.5rem 0.75rem; border: 1.5px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 0.8rem; font-family: inherit; font-size: 14px; }
+  .form-input:focus { outline: none; border-color: var(--blue); }
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
   .modal-overlay.show { display: flex; }
   .modal { background: white; border-radius: var(--radius-lg); padding: 1.25rem; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
@@ -44,8 +46,6 @@
   .line-blu { background: var(--blue); } .line-oro { background: var(--gold); } .line-verde { background: var(--green); }
   .allergy-warning { color: #dc2626; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 3px; margin-top: 2px; }
   .avviso-banner { background: linear-gradient(135deg, #fef3c7, #fffbeb); border: 1.5px solid var(--gold); border-radius: var(--radius-lg); padding: 0.85rem 1rem; margin-bottom: 0.6rem; }
-  .avviso-titolo { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; color: var(--gray-900); }
-  .avviso-testo { font-size: 13px; color: var(--gray-700); line-height: 1.45; margin-top: 3px; }
   .hero-card { background: linear-gradient(135deg, var(--blue-light), #eff6ff); border-radius: var(--radius-lg); padding: 1.2rem; margin-bottom: 0.75rem; border: 1.5px solid #bfdbfe; }
   .hero-title { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
   .hero-sub { font-size: 13px; color: var(--gray-700); }
@@ -55,7 +55,13 @@
   .stat-value { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 700; color: var(--blue); }
   .vuoto { text-align: center; padding: 16px; color: var(--gray-400); font-size: 13px; }
   .loading { text-align: center; padding: 30px; color: var(--gray-400); font-size: 13px; }
-  #easter-egg { display: none; position: fixed; inset: 0; background: white; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: 'Nunito', sans-serif; }
+  /* Schermata codice famiglia */
+  .codice-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #1a4fa3, #153d80); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 2rem; }
+  .codice-box { background: white; border-radius: 20px; padding: 2rem; width: 100%; max-width: 340px; text-align: center; }
+  .codice-title { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+  .codice-sub { font-size: 13px; color: var(--gray-500); margin-bottom: 20px; line-height: 1.5; }
+  .codice-famiglia-badge { background: var(--blue-light); border-radius: var(--radius); padding: 6px 12px; font-size: 12px; color: var(--blue-text); font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 0.75rem; }
+  #easter-egg { display: none; position: fixed; inset: 0; background: white; z-index: 99999; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: 'Nunito', sans-serif; }
   #easter-egg.show { display: flex; }
   .close-egg { position: absolute; top: 20px; left: 20px; font-size: 30px; cursor: pointer; color: black; border: none; background: none; }
 </style>
@@ -67,12 +73,25 @@
   <h1 style="font-size: 50px; color: rgb(60, 4, 97); font-weight: 900; padding: 20px;">Grest 2026 ✝</h1>
 </div>
 
-<div class="app-shell">
+<!-- SCHERMATA CODICE FAMIGLIA -->
+<div class="codice-screen" id="codice-screen">
+  <div class="codice-box">
+    <div style="font-size:40px; margin-bottom:10px">✝</div>
+    <div class="codice-title">GREST 2026</div>
+    <div class="codice-sub">Inserisci il tuo <b>codice famiglia</b> per accedere.<br><br>Se è la prima volta, scegli un codice che ricorderai (es. <b>Rossi42</b>) e usalo sempre per tornare a vedere le tue iscrizioni.</div>
+    <input type="text" id="codice-input" class="form-input" placeholder="Es: Rossi42" onkeydown="if(event.key==='Enter') accediConCodice()" style="text-align:center; font-size:16px; font-weight:700; letter-spacing:1px">
+    <button class="btn-primary" style="width:100%; justify-content:center" onclick="accediConCodice()">Entra</button>
+    <div id="codice-error" style="color:var(--red); font-size:12px; margin-top:8px; display:none">Inserisci un codice valido (almeno 4 caratteri)</div>
+    <div style="margin-top:16px; font-size:11px; color:var(--gray-400)">⚠️ Ricordati il codice — non è recuperabile</div>
+  </div>
+</div>
+
+<div class="app-shell" id="main-app" style="display:none">
   <div class="header">
     <div class="header-top">
       <span style="font-size:24px; cursor:pointer" id="logo-icon">✝</span>
       <h1>GREST Santissima Trinità</h1>
-      <span class="badge-ruolo">👨‍👩‍👧 Genitori</span>
+      <span class="badge-ruolo" id="badge-codice">👨‍👩‍👧</span>
     </div>
     <div class="tab-bar">
       <div class="tab active" onclick="showTab('home',this)"><i class="ti ti-home"></i>Home</div>
@@ -86,8 +105,13 @@
         <div class="hero-title">Benvenuto al GREST 2026! 🎉</div>
         <div class="hero-sub">Parrocchia Santissima Trinità — qui trovi avvisi e programma.</div>
       </div>
+      <div class="codice-famiglia-badge">
+        <i class="ti ti-key" style="font-size:16px"></i>
+        Codice famiglia: <span id="badge-codice-testo" style="font-family:monospace"></span>
+        <button onclick="cambiaCodice()" style="margin-left:auto; background:none; border:none; color:var(--blue-text); font-size:11px; cursor:pointer; font-weight:700">Cambia</button>
+      </div>
       <div class="stat-row">
-        <div class="stat"><div class="stat-label">Bambini iscritti</div><div class="stat-value" id="dash-tot">—</div></div>
+        <div class="stat"><div class="stat-label">I miei bambini</div><div class="stat-value" id="dash-miei">—</div></div>
         <div class="stat"><div class="stat-label">Avvisi</div><div class="stat-value" id="dash-navvisi" style="color:var(--gold)">—</div></div>
       </div>
       <div class="card">
@@ -186,10 +210,9 @@
   </div>
 </div>
 
-<!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBLsK6_odHquTHAUy3xDSI1pqic940zUdI",
@@ -203,8 +226,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+let codiceFamiglia = null;
 let dati = { bambini: [], avvisi: [], gruppi: ["Generale"], giorni: ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"], programmi: [[],[],[],[],[]] };
 let bambinoIdInModifica = null;
+let unsubBambini = null;
 
 // Easter egg
 let countClicks = 0, lastClickTime = 0;
@@ -216,38 +241,66 @@ document.getElementById('logo-icon').addEventListener('click', () => {
 });
 window.toggleEgg = (show) => document.getElementById('easter-egg').classList.toggle('show', show);
 
-window.showTab = (name, el) => {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('sec-'+name).classList.add('active');
-  el.classList.add('active');
+// Controlla se c'è già un codice salvato
+const codicesSalvato = localStorage.getItem('grest_codice_famiglia');
+if (codicesSalvato) {
+  avviaConCodice(codicesSalvato);
+}
+
+window.accediConCodice = () => {
+  const val = document.getElementById('codice-input').value.trim();
+  if (val.length < 4) {
+    document.getElementById('codice-error').style.display = 'block';
+    return;
+  }
+  localStorage.setItem('grest_codice_famiglia', val);
+  avviaConCodice(val);
 };
 
-// Ascolta bambini in tempo reale
-onSnapshot(collection(db, 'bambini'), snap => {
-  dati.bambini = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderBambini();
-  document.getElementById('dash-tot').textContent = dati.bambini.length;
-});
+function avviaConCodice(codice) {
+  codiceFamiglia = codice.toLowerCase();
+  document.getElementById('codice-screen').style.display = 'none';
+  document.getElementById('main-app').style.display = 'flex';
+  document.getElementById('badge-codice').textContent = '🔑 ' + codice;
+  document.getElementById('badge-codice-testo').textContent = codice;
 
-// Ascolta avvisi in tempo reale
-onSnapshot(query(collection(db, 'avvisi'), orderBy('timestamp', 'desc')), snap => {
-  dati.avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderAvvisi();
-  document.getElementById('dash-navvisi').textContent = dati.avvisi.length;
-});
+  // Ascolta SOLO i bambini di questa famiglia
+  if (unsubBambini) unsubBambini();
+  unsubBambini = onSnapshot(
+    query(collection(db, 'bambini'), where('codiceFamiglia', '==', codiceFamiglia)),
+    snap => {
+      dati.bambini = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderBambini();
+      document.getElementById('dash-miei').textContent = dati.bambini.length;
+    }
+  );
 
-// Ascolta impostazioni (gruppi, giorni, programma)
-onSnapshot(doc(db, 'impostazioni', 'config'), snap => {
-  if (snap.exists()) {
-    const d = snap.data();
-    if (d.gruppi) dati.gruppi = d.gruppi;
-    if (d.giorni) dati.giorni = d.giorni;
-    if (d.programmi) dati.programmi = d.programmi;
-    aggiornaSelect();
-    renderProgramma();
+  // Ascolta avvisi (tutti, sono comunicazioni pubbliche)
+  onSnapshot(query(collection(db, 'avvisi'), orderBy('timestamp', 'desc')), snap => {
+    dati.avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderAvvisi();
+    document.getElementById('dash-navvisi').textContent = dati.avvisi.length;
+  });
+
+  // Ascolta impostazioni
+  onSnapshot(doc(db, 'impostazioni', 'config'), snap => {
+    if (snap.exists()) {
+      const d = snap.data();
+      if (d.gruppi) dati.gruppi = d.gruppi;
+      if (d.giorni) dati.giorni = d.giorni;
+      if (d.programmi) dati.programmi = d.programmi;
+      aggiornaSelect();
+      renderProgramma();
+    }
+  });
+}
+
+window.cambiaCodice = () => {
+  if (confirm("Vuoi cambiare codice famiglia? Perderai la vista dei bambini attuali finché non reinserisci il codice corretto.")) {
+    localStorage.removeItem('grest_codice_famiglia');
+    location.reload();
   }
-});
+};
 
 function aggiornaSelect() {
   const gSel = document.getElementById('giorno-select');
@@ -256,6 +309,13 @@ function aggiornaSelect() {
   if (old && old < dati.giorni.length) gSel.value = old;
   document.getElementById('b-gruppo').innerHTML = dati.gruppi.map(g => `<option>${g}</option>`).join('');
 }
+
+window.showTab = (name, el) => {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  el.classList.add('active');
+};
 
 function renderBambini() {
   const html = dati.bambini.map(b => {
@@ -288,10 +348,10 @@ function renderAvvisi() {
   document.getElementById('lista-avvisi').innerHTML = dati.avvisi.length
     ? dati.avvisi.map(a => `<div class="avviso-banner">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-          <div class="avviso-titolo">🔔 ${a.titolo}</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:14px">🔔 ${a.titolo}</div>
           <span style="font-size:10px;color:var(--gray-500);white-space:nowrap">${a.data||''}</span>
         </div>
-        <div class="avviso-testo">${a.testo}</div>
+        <div style="font-size:13px;color:var(--gray-700);line-height:1.45;margin-top:3px">${a.testo}</div>
         <div style="margin-top:6px"><span class="badge-avviso">Per: ${a.dest||'Tutti'}</span></div>
       </div>`).join('')
     : '<div class="vuoto">Nessun avviso al momento</div>';
@@ -310,7 +370,8 @@ window.salvaBambino = async () => {
     classe: document.getElementById('b-classe').value.trim(),
     taglia: document.getElementById('b-taglia').value,
     telefono: document.getElementById('b-telefono').value.trim(),
-    settimane, presente: false
+    settimane, presente: false,
+    codiceFamiglia: codiceFamiglia
   });
   ['b-nome','b-allergie','b-indirizzo','b-classe','b-telefono'].forEach(id => document.getElementById(id).value='');
   document.getElementById('b-nascita').value=''; document.getElementById('b-nascita').type='text';
@@ -362,8 +423,6 @@ window.eliminaBambino = async (id) => {
 
 window.chiudiModal = (id) => document.getElementById(id).classList.remove('show');
 window.apriModaleBambino = () => document.getElementById('modal-bambino').classList.add('show');
-
-aggiornaSelect();
 </script>
 </body>
 </html>
