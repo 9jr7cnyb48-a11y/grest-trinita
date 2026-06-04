@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GREST Santissima Trinità – Animatori</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Nunito+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #1a4fa3; --blue-dark: #153d80; --blue-light: #dbeafe; --blue-text: #1e40af;
+    --gold: #d97706; --gold-light: #fef3c7; --green: #16a34a; --green-light: #dcfce7;
+    --red: #dc2626; --red-light: #fee2e2; --purple: #7c3aed; --purple-light: #ede9fe;
+    --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-400: #9ca3af; --gray-500: #6b7280;
+    --gray-700: #374151; --gray-900: #111827;
+    --radius: 10px; --radius-lg: 14px; --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  html, body { height: 100%; font-family: 'Nunito Sans', sans-serif; font-size: 15px; background: var(--gray-100); color: var(--gray-900); }
+  .app-shell { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; background: var(--gray-100); }
+  .header { background: linear-gradient(135deg, #1a4fa3 0%, #153d80 100%); color: white; padding: 1.1rem 1.1rem 0; position: sticky; top: 0; z-index: 50; }
+  .header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 0.15rem; }
+  .header h1 { font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 700; flex: 1; }
+  .btn-settings { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; color: white; cursor: pointer; padding: 5px 8px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+  .badge-ruolo { background: rgba(124,58,237,0.35); border: 1px solid rgba(167,139,250,0.5); border-radius: 8px; color: #ddd6fe; font-size: 10px; font-weight: 700; padding: 3px 8px; white-space: nowrap; }
+  .tab-bar { display: flex; background: rgba(0,0,0,0.2); border-radius: 8px 8px 0 0; overflow: hidden; margin-top: 10px; }
+  .tab { flex: 1; padding: 0.55rem 0.2rem; text-align: center; font-size: 11px; color: rgba(255,255,255,0.6); cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab i { display: block; font-size: 19px; }
+  .tab.active { color: #fff; border-bottom: 2px solid #ffd700; background: rgba(255,255,255,0.08); }
+  .content { flex: 1; padding: 0.9rem; overflow-y: auto; }
+  .section { display: none; } .section.active { display: block; }
+  .card { background: white; border-radius: var(--radius-lg); padding: 0.9rem 1rem; margin-bottom: 0.75rem; box-shadow: var(--shadow); }
+  .card-title { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.75rem; }
+  .stat { background: white; border-radius: var(--radius-lg); padding: 0.8rem 0.9rem; box-shadow: var(--shadow); }
+  .stat-label { font-size: 11.5px; color: var(--gray-500); font-weight: 600; }
+  .stat-value { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 700; color: var(--blue); }
+  .bambino-card { background: white; border-radius: var(--radius-lg); padding: 0.7rem 0.85rem; margin-bottom: 0.55rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
+  .bambino-card.presente { border-left: 5px solid var(--green); background: #f0fff4; }
+  .attivita-card { background: white; border-radius: var(--radius-lg); padding: 0.7rem 0.85rem; margin-bottom: 0.55rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; background: var(--blue-light); color: var(--blue-text); flex-shrink: 0; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; background: var(--gray-200); }
+  .btn-primary { background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .btn-success { background: var(--green); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .form-input { width: 100%; padding: 0.5rem 0.75rem; border: 1.5px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 0.8rem; font-family: inherit; font-size: 14px; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: white; border-radius: var(--radius-lg); padding: 1.25rem; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+  .filter-chip { font-size: 12px; padding: 4px 12px; border-radius: 99px; border: 1.5px solid var(--gray-200); background: white; cursor: pointer; color: var(--gray-500); font-weight: 700; }
+  .filter-chip.active { background: var(--blue); color: white; border-color: var(--blue); }
+  .checkbox-presenza { width: 22px; height: 22px; cursor: pointer; accent-color: var(--green); }
+  .vert-line { width: 4px; border-radius: 4px; align-self: stretch; min-height: 35px; }
+  .line-blu { background: var(--blue); } .line-oro { background: var(--gold); } .line-verde { background: var(--green); }
+  .allergy-warning { color: #dc2626; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 3px; margin-top: 2px; }
+  .avviso-card { background: white; border-radius: var(--radius-lg); padding: 0.85rem 1rem; margin-bottom: 0.6rem; box-shadow: var(--shadow); border-left: 4px solid var(--gold); }
+  .comm-compose { background: linear-gradient(135deg, #f0f7ff, #e8f4ff); border: 1.5px solid #bfdbfe; border-radius: var(--radius-lg); padding: 1rem; margin-bottom: 0.75rem; }
+  .comm-compose-title { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; color: var(--blue); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .vuoto { text-align: center; padding: 16px; color: var(--gray-400); font-size: 13px; }
+  .loading { text-align: center; padding: 30px; color: var(--gray-400); font-size: 13px; }
+  /* Password screen */
+  .pwd-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #1a4fa3, #153d80); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 2rem; }
+  .pwd-box { background: white; border-radius: 20px; padding: 2rem; width: 100%; max-width: 340px; text-align: center; }
+  .pwd-title { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+  .pwd-sub { font-size: 13px; color: var(--gray-500); margin-bottom: 20px; }
+  #easter-egg { display: none; position: fixed; inset: 0; background: white; z-index: 99999; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: 'Nunito', sans-serif; }
+  #easter-egg.show { display: flex; }
+  .close-egg { position: absolute; top: 20px; left: 20px; font-size: 30px; cursor: pointer; color: black; border: none; background: none; }
+</style>
+</head>
+<body>
+
+<div id="easter-egg">
+  <button class="close-egg" onclick="toggleEgg(false)">✕</button>
+  <h1 style="font-size: 50px; color: rgb(60, 4, 97); font-weight: 900; padding: 20px;">Grest 2026 ✝</h1>
+</div>
+
+<!-- SCHERMATA PASSWORD -->
+<div class="pwd-screen" id="pwd-screen">
+  <div class="pwd-box">
+    <div style="font-size:40px; margin-bottom:10px">✝</div>
+    <div class="pwd-title">GREST 2026</div>
+    <div class="pwd-sub">Area Animatori — inserisci la password</div>
+    <input type="password" id="pwd-input" class="form-input" placeholder="Password" onkeydown="if(event.key==='Enter') verificaPwd()">
+    <button class="btn-primary" style="width:100%; justify-content:center" onclick="verificaPwd()">Entra</button>
+    <div id="pwd-error" style="color:var(--red); font-size:12px; margin-top:8px; display:none">Password errata</div>
+  </div>
+</div>
+
+<div class="app-shell" id="main-app" style="display:none">
+  <div class="header">
+    <div class="header-top">
+      <span style="font-size:24px; cursor:pointer" id="logo-icon">✝</span>
+      <h1>GREST Santissima Trinità</h1>
+      <span class="badge-ruolo">⚡ Animatori</span>
+      <button class="btn-settings" onclick="apriImpostazioni()"><i class="ti ti-settings"></i></button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab active" onclick="showTab('dashboard',this)"><i class="ti ti-home"></i>Home</div>
+      <div class="tab" onclick="showTab('iscrizioni',this)"><i class="ti ti-users"></i>Bambini</div>
+      <div class="tab" onclick="showTab('programma',this)"><i class="ti ti-calendar"></i>Programma</div>
+      <div class="tab" onclick="showTab('comunicazioni',this)"><i class="ti ti-message"></i>Avvisi</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- DASHBOARD -->
+    <div class="section active" id="sec-dashboard">
+      <div class="stats">
+        <div class="stat"><div class="stat-label">Iscritti Totali</div><div class="stat-value" id="dash-tot">—</div></div>
+        <div class="stat"><div class="stat-label">Presenti Oggi</div><div class="stat-value" id="dash-presenti" style="color:var(--green)">—</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-bell"></i> Ultimi avvisi</div>
+        <div id="dash-avvisi-list"><div class="loading">Caricamento...</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-alert-triangle" style="color:var(--red)"></i> Allergie / Note mediche</div>
+        <div id="dash-allergie-list"><div class="loading">Caricamento...</div></div>
+      </div>
+    </div>
+
+    <!-- BAMBINI -->
+    <div class="section" id="sec-iscrizioni">
+      <div style="display:flex; gap:8px; margin-bottom:0.6rem">
+        <input type="text" id="search-input" placeholder="Cerca bambino..." class="form-input" style="margin:0" oninput="renderBambini()">
+        <button class="btn-primary" onclick="apriModaleBambino()"><i class="ti ti-plus"></i></button>
+      </div>
+      <div id="filter-row" style="display:flex; gap:5px; margin-bottom:10px; overflow-x:auto; padding-bottom:5px"></div>
+      <div id="lista-bambini"><div class="loading">Caricamento...</div></div>
+    </div>
+
+    <!-- PROGRAMMA -->
+    <div class="section" id="sec-programma">
+      <div style="display:flex; gap:8px; margin-bottom:1rem">
+        <select id="giorno-select" class="form-input" style="margin:0" onchange="renderProgramma()"></select>
+        <button class="btn-primary" onclick="apriModaleAttivita()"><i class="ti ti-plus"></i></button>
+      </div>
+      <div id="lista-attivita"></div>
+    </div>
+
+    <!-- COMUNICAZIONI -->
+    <div class="section" id="sec-comunicazioni">
+      <div class="comm-compose">
+        <div class="comm-compose-title"><i class="ti ti-send" style="font-size:18px"></i> Nuova Comunicazione</div>
+        <input type="text" id="msg-titolo-input" placeholder="Titolo avviso" class="form-input">
+        <textarea id="msg-testo-input" placeholder="Testo del messaggio per i genitori..." class="form-input" style="height:80px; resize:none"></textarea>
+        <div style="display:flex; gap:8px">
+          <select id="msg-dest" class="form-input" style="margin:0; flex:1"></select>
+          <button class="btn-success" onclick="inviaAvviso()" style="white-space:nowrap"><i class="ti ti-send"></i> Invia</button>
+        </div>
+      </div>
+      <div id="lista-avvisi"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALI -->
+<div class="modal-overlay" id="modal-bambino">
+  <div class="modal">
+    <h2 style="margin-bottom:15px">Aggiungi Bambino</h2>
+    <label style="font-size:12px; font-weight:700">Nome e Cognome *</label>
+    <input type="text" id="b-nome" placeholder="Es: Stella Mira Cordana" class="form-input">
+    <label style="font-size:12px; font-weight:700">Data di Nascita *</label>
+    <input type="text" id="b-nascita" placeholder="Es: 11-09-2009" class="form-input" onfocus="(this.type='date')" onblur="(this.value==''?this.type='text':this.type='date')">
+    <label style="font-size:12px; font-weight:700">Gruppo</label>
+    <select id="b-gruppo" class="form-input"></select>
+    <label style="font-size:12px; font-weight:700">Via e Numero Civico</label>
+    <input type="text" id="b-indirizzo" placeholder="Es: Via Roma 12" class="form-input">
+    <label style="font-size:12px; font-weight:700">Classe Frequentata</label>
+    <input type="text" id="b-classe" placeholder="Es: 3ª Elementare" class="form-input">
+    <label style="font-size:12px; font-weight:700">Taglia Maglietta</label>
+    <select id="b-taglia" class="form-input">
+      <option value="">-- Seleziona --</option>
+      <option value="S">S</option><option value="M">M</option>
+      <option value="L">L</option><option value="XL">XL</option>
+    </select>
+    <label style="font-size:12px; font-weight:700">Telefono Genitore</label>
+    <input type="tel" id="b-telefono" placeholder="Es: 333 1234567" class="form-input">
+    <label style="font-size:12px; font-weight:700">Settimane di Partecipazione</label>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:0.8rem">
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett1"> Settimana 1</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett2"> Settimana 2</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett3"> Settimana 3</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett4"> Settimana 4</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett5"> Settimana 5</label>
+    </div>
+    <label style="font-size:12px; font-weight:700; color:var(--red)">Eventuali Allergie / Note Mediche</label>
+    <textarea id="b-allergie" placeholder="Es: Celiachia o lascia vuoto" class="form-input" style="height:60px"></textarea>
+    <div style="display:flex; gap:10px; margin-top:10px">
+      <button class="btn-primary" style="flex:1" onclick="salvaBambino()">Salva</button>
+      <button onclick="chiudiModal('modal-bambino')" style="background:var(--gray-200); border:none; padding:10px; border-radius:10px; cursor:pointer">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-modifica">
+  <div class="modal">
+    <h2 style="margin-bottom:15px">✏️ Modifica Bambino</h2>
+    <label style="font-size:12px; font-weight:700">Nome e Cognome *</label>
+    <input type="text" id="m-nome" class="form-input">
+    <label style="font-size:12px; font-weight:700">Data di Nascita *</label>
+    <input type="date" id="m-nascita" class="form-input">
+    <label style="font-size:12px; font-weight:700">Gruppo</label>
+    <select id="m-gruppo" class="form-input"></select>
+    <label style="font-size:12px; font-weight:700">Via e Numero Civico</label>
+    <input type="text" id="m-indirizzo" class="form-input">
+    <label style="font-size:12px; font-weight:700">Classe Frequentata</label>
+    <input type="text" id="m-classe" class="form-input">
+    <label style="font-size:12px; font-weight:700">Taglia Maglietta</label>
+    <select id="m-taglia" class="form-input">
+      <option value="">-- Seleziona --</option>
+      <option value="S">S</option><option value="M">M</option>
+      <option value="L">L</option><option value="XL">XL</option>
+    </select>
+    <label style="font-size:12px; font-weight:700">Telefono Genitore</label>
+    <input type="tel" id="m-telefono" class="form-input">
+    <label style="font-size:12px; font-weight:700">Settimane di Partecipazione</label>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:0.8rem">
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="m-sett1"> Settimana 1</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="m-sett2"> Settimana 2</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="m-sett3"> Settimana 3</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="m-sett4"> Settimana 4</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="m-sett5"> Settimana 5</label>
+    </div>
+    <label style="font-size:12px; font-weight:700; color:var(--red)">Allergie / Note Mediche</label>
+    <textarea id="m-allergie" class="form-input" style="height:60px"></textarea>
+    <div style="display:flex; gap:10px; margin-top:10px">
+      <button class="btn-primary" style="flex:1" onclick="salvaModifica()">Salva Modifiche</button>
+      <button onclick="chiudiModal('modal-modifica')" style="background:var(--gray-200); border:none; padding:10px; border-radius:10px; cursor:pointer">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-attivita">
+  <div class="modal">
+    <h2 style="margin-bottom:15px">Nuova Attività</h2>
+    <input type="time" id="att-orario" class="form-input" value="09:00">
+    <input type="text" id="att-nome-input" placeholder="Nome attività" class="form-input">
+    <input type="text" id="att-det-input" placeholder="Dettagli" class="form-input">
+    <select id="att-colore" class="form-input">
+      <option value="line-blu">🔵 Blu</option>
+      <option value="line-oro">🟡 Oro</option>
+      <option value="line-verde">🟢 Verde</option>
+    </select>
+    <div style="display:flex; gap:10px">
+      <button class="btn-primary" onclick="salvaAttivita()">Salva</button>
+      <button onclick="chiudiModal('modal-attivita')" style="background:var(--gray-200); border:none; padding:10px; border-radius:10px; cursor:pointer">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-impostazioni">
+  <div class="modal">
+    <h2 style="margin-bottom:15px">⚙️ Impostazioni</h2>
+    <label style="font-size:12px; font-weight:700">Gruppi:</label>
+    <div id="sett-gruppi-list"></div>
+    <button onclick="aggiungiGruppo()" class="btn-primary" style="padding:5px 10px; font-size:12px; margin-bottom:12px">+ Gruppo</button>
+    <label style="font-size:12px; font-weight:700">Giorni GREST:</label>
+    <div id="sett-giorni-list"></div>
+    <button onclick="aggiungiGiorno()" class="btn-primary" style="padding:5px 10px; font-size:12px; margin-bottom:12px">+ Giorno</button>
+    <div style="margin-top:10px; display:flex; gap:10px">
+      <button class="btn-primary" onclick="salvaImpostazioni()">Salva</button>
+      <button onclick="chiudiModal('modal-impostazioni')" style="background:var(--gray-200); border:none; padding:10px; border-radius:10px; cursor:pointer">Esci</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+const PASSWORD = "grest2026";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBLsK6_odHquTHAUy3xDSI1pqic940zUdI",
+  authDomain: "grest2026-69dd7.firebaseapp.com",
+  projectId: "grest2026-69dd7",
+  storageBucket: "grest2026-69dd7.firebasestorage.app",
+  messagingSenderId: "1007701251982",
+  appId: "1:1007701251982:web:1ea1dc09c08d994703b6df"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let dati = { bambini: [], avvisi: [], gruppi: ["Generale"], giorni: ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"], programmi: [[],[],[],[],[]] };
+let currentFilter = 'tutti';
+let bambinoIdInModifica = null;
+let settGruppiTemp = [];
+let settGiorniTemp = [];
+let settProgrammiTemp = [];
+
+// PASSWORD
+window.verificaPwd = () => {
+  const val = document.getElementById('pwd-input').value;
+  if (val === PASSWORD) {
+    document.getElementById('pwd-screen').style.display = 'none';
+    document.getElementById('main-app').style.display = 'flex';
+    avviaFirebase();
+  } else {
+    document.getElementById('pwd-error').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+  }
+};
+
+function avviaFirebase() {
+  // Easter egg
+  let countClicks = 0, lastClickTime = 0;
+  document.getElementById('logo-icon').addEventListener('click', () => {
+    const now = Date.now();
+    countClicks = (now - lastClickTime > 500) ? 1 : countClicks + 1;
+    lastClickTime = now;
+    if (countClicks === 5) { countClicks = 0; toggleEgg(true); }
+  });
+
+  onSnapshot(collection(db, 'bambini'), snap => {
+    dati.bambini = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderBambini();
+    renderDashboard();
+  });
+
+  onSnapshot(query(collection(db, 'avvisi'), orderBy('timestamp', 'desc')), snap => {
+    dati.avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderAvvisi();
+    renderDashboard();
+  });
+
+  onSnapshot(doc(db, 'impostazioni', 'config'), snap => {
+    if (snap.exists()) {
+      const d = snap.data();
+      if (d.gruppi) dati.gruppi = d.gruppi;
+      if (d.giorni) dati.giorni = d.giorni;
+      if (d.programmi) dati.programmi = d.programmi;
+    }
+    aggiornaSelect();
+    renderProgramma();
+  });
+}
+
+function aggiornaSelect() {
+  const gSel = document.getElementById('giorno-select');
+  const old = gSel.value;
+  gSel.innerHTML = dati.giorni.map((g,i) => `<option value="${i}">${g}</option>`).join('');
+  if (old && old < dati.giorni.length) gSel.value = old;
+  document.getElementById('b-gruppo').innerHTML = dati.gruppi.map(g => `<option>${g}</option>`).join('');
+  document.getElementById('msg-dest').innerHTML = '<option>Tutti</option>' + dati.gruppi.map(g => `<option>${g}</option>`).join('');
+  const filterRow = document.getElementById('filter-row');
+  filterRow.innerHTML = `<div class="filter-chip ${currentFilter==='tutti'?'active':''}" onclick="setFilter('tutti')">Tutti</div>` +
+    dati.gruppi.map(g => `<div class="filter-chip ${currentFilter===g?'active':''}" onclick="setFilter('${g}')">${g}</div>`).join('');
+}
+
+window.toggleEgg = (show) => document.getElementById('easter-egg').classList.toggle('show', show);
+
+window.showTab = (name, el) => {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  el.classList.add('active');
+};
+
+window.setFilter = (f) => { currentFilter = f; aggiornaSelect(); renderBambini(); };
+
+function renderDashboard() {
+  document.getElementById('dash-tot').textContent = dati.bambini.length;
+  document.getElementById('dash-presenti').textContent = dati.bambini.filter(b => b.presente).length;
+  document.getElementById('dash-avvisi-list').innerHTML = dati.avvisi.length
+    ? dati.avvisi.slice(0,3).map(a => `<div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--gray-100)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:5px;flex-shrink:0"></div><div><b style="font-size:13px">${a.titolo}</b>: ${(a.testo||'').substring(0,40)}...<div style="font-size:11px;color:gray">${a.data||''}</div></div></div>`).join('')
+    : '<div class="vuoto">Nessun avviso</div>';
+  const conAllergie = dati.bambini.filter(b => b.allergie && b.allergie.trim());
+  document.getElementById('dash-allergie-list').innerHTML = conAllergie.length
+    ? conAllergie.map(b => `<div style="display:flex;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid var(--gray-100)"><div class="avatar" style="width:28px;height:28px;font-size:11px">${b.nome[0]}</div><div><b style="font-size:13px">${b.nome}</b><div style="color:#dc2626;font-size:11px;font-weight:700">⚠️ ${b.allergie}</div></div></div>`).join('')
+    : '<div class="vuoto">Nessuna allergia segnalata</div>';
+}
+
+function renderBambini() {
+  const q = (document.getElementById('search-input')?.value || '').toLowerCase();
+  const html = dati.bambini.map(b => {
+    if (!b.nome.toLowerCase().includes(q)) return '';
+    if (currentFilter !== 'tutti' && b.gruppo !== currentFilter) return '';
+    let dataDisplay = b.nascita ? b.nascita.split('-').reverse().join('/') : "";
+    return `<div class="bambino-card ${b.presente?'presente':''}">
+      <input type="checkbox" class="checkbox-presenza" ${b.presente?'checked':''} onchange="togglePresenza('${b.id}',this.checked)">
+      <div class="avatar">${b.nome[0]}</div>
+      <div style="flex:1">
+        <b>${b.nome}</b><br>
+        <small style="color:var(--gray-500)">${dataDisplay}${b.classe?' · '+b.classe:''}</small>
+        ${b.allergie?`<div style="color:#dc2626;font-size:11px;font-weight:700;display:flex;align-items:center;gap:3px;margin-top:2px"><i class="ti ti-alert-triangle"></i> ${b.allergie}</div>`:''}
+        ${b.telefono?`<div style="font-size:11px;color:var(--gray-500)">📞 ${b.telefono}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+        <span class="badge">${b.gruppo||''}</span>
+        ${b.taglia?`<span class="badge" style="background:var(--blue-light);color:var(--blue-text)">${b.taglia}</span>`:''}
+      </div>
+      <button onclick="apriModifica('${b.id}')" style="color:var(--blue);border:none;background:none;cursor:pointer;padding:5px;font-size:16px">✏️</button>
+      <button onclick="eliminaBambino('${b.id}')" style="color:red;border:none;background:none;cursor:pointer;padding:5px">✕</button>
+    </div>`;
+  }).join('');
+  document.getElementById('lista-bambini').innerHTML = html || '<div class="vuoto">Nessun bambino trovato</div>';
+}
+
+window.renderProgramma = () => {
+  const dayIdx = document.getElementById('giorno-select').value;
+  const lista = dati.programmi[dayIdx] || [];
+  const sorted = [...lista].sort((a,b) => a.orario.localeCompare(b.orario));
+  document.getElementById('lista-attivita').innerHTML = sorted.length
+    ? sorted.map((a,i) => `<div class="attivita-card"><div style="font-size:13px;font-weight:700;color:var(--blue);min-width:40px">${a.orario}</div><div class="vert-line ${a.colore}"></div><div style="flex:1"><b>${a.nome}</b><br><small>${a.det}</small></div><button onclick="eliminaAttivita(${dayIdx},${i})" style="color:red;border:none;background:none;cursor:pointer;padding:5px">✕</button></div>`).join('')
+    : '<div class="vuoto">Nessuna attività. Aggiungine una con +</div>';
+};
+
+function renderAvvisi() {
+  document.getElementById('lista-avvisi').innerHTML = dati.avvisi.length
+    ? dati.avvisi.map((a,i) => `<div class="avviso-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:5px">
+          <b>${a.titolo}</b>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span style="font-size:10px;color:var(--gray-500)">${a.data||''}</span>
+            <button onclick="eliminaAvviso('${a.id}')" style="color:var(--red);font-size:11px;border:none;background:none;cursor:pointer;font-weight:700">✕</button>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--gray-700);margin-bottom:6px;line-height:1.45">${a.testo}</p>
+        <span class="badge">${a.dest||'Tutti'}</span>
+      </div>`).join('')
+    : '<div class="vuoto">Nessuna comunicazione inviata</div>';
+}
+
+window.togglePresenza = async (id, val) => {
+  await updateDoc(doc(db, 'bambini', id), { presente: val });
+};
+
+window.salvaBambino = async () => {
+  const nome = document.getElementById('b-nome').value.trim();
+  const nascita = document.getElementById('b-nascita').value;
+  if (!nome || !nascita) { alert("Nome e Data di nascita sono obbligatori!"); return; }
+  const settimane = [1,2,3,4,5].filter(n => document.getElementById('b-sett'+n).checked);
+  await addDoc(collection(db, 'bambini'), {
+    nome, nascita,
+    gruppo: document.getElementById('b-gruppo').value,
+    allergie: document.getElementById('b-allergie').value.trim(),
+    indirizzo: document.getElementById('b-indirizzo').value.trim(),
+    classe: document.getElementById('b-classe').value.trim(),
+    taglia: document.getElementById('b-taglia').value,
+    telefono: document.getElementById('b-telefono').value.trim(),
+    settimane, presente: false
+  });
+  ['b-nome','b-allergie','b-indirizzo','b-classe','b-telefono'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('b-nascita').value=''; document.getElementById('b-nascita').type='text';
+  document.getElementById('b-taglia').value='';
+  [1,2,3,4,5].forEach(n => document.getElementById('b-sett'+n).checked=false);
+  chiudiModal('modal-bambino');
+};
+
+window.salvaAttivita = async () => {
+  const dayIdx = parseInt(document.getElementById('giorno-select').value);
+  const nuovi = [...(dati.programmi[dayIdx]||[]), {
+    orario: document.getElementById('att-orario').value,
+    nome: document.getElementById('att-nome-input').value,
+    det: document.getElementById('att-det-input').value,
+    colore: document.getElementById('att-colore').value
+  }];
+  const nuoviProgrammi = [...dati.programmi];
+  nuoviProgrammi[dayIdx] = nuovi;
+  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: dati.gruppi, giorni: dati.giorni, programmi: nuoviProgrammi }, { merge: true });
+  chiudiModal('modal-attivita');
+};
+
+window.eliminaAttivita = async (dayIdx, i) => {
+  const nuovi = [...dati.programmi];
+  nuovi[dayIdx] = nuovi[dayIdx].filter((_,idx) => idx !== i);
+  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: dati.gruppi, giorni: dati.giorni, programmi: nuovi }, { merge: true });
+};
+
+window.inviaAvviso = async () => {
+  const t = document.getElementById('msg-titolo-input').value.trim();
+  const m = document.getElementById('msg-testo-input').value.trim();
+  if (!t || !m) { alert("Inserisci titolo e messaggio!"); return; }
+  await addDoc(collection(db, 'avvisi'), {
+    titolo: t, testo: m,
+    dest: document.getElementById('msg-dest').value,
+    data: new Date().toLocaleDateString('it-IT'),
+    timestamp: serverTimestamp()
+  });
+  document.getElementById('msg-titolo-input').value = '';
+  document.getElementById('msg-testo-input').value = '';
+};
+
+window.apriModifica = (id) => {
+  bambinoIdInModifica = id;
+  const b = dati.bambini.find(x => x.id === id);
+  if (!b) return;
+  document.getElementById('m-nome').value = b.nome||'';
+  document.getElementById('m-nascita').value = b.nascita||'';
+  document.getElementById('m-indirizzo').value = b.indirizzo||'';
+  document.getElementById('m-classe').value = b.classe||'';
+  document.getElementById('m-taglia').value = b.taglia||'';
+  document.getElementById('m-telefono').value = b.telefono||'';
+  document.getElementById('m-allergie').value = b.allergie||'';
+  document.getElementById('m-gruppo').innerHTML = dati.gruppi.map(g=>`<option ${g===b.gruppo?'selected':''}>${g}</option>`).join('');
+  [1,2,3,4,5].forEach(n => document.getElementById('m-sett'+n).checked = b.settimane && b.settimane.includes(n));
+  document.getElementById('modal-modifica').classList.add('show');
+};
+
+window.salvaModifica = async () => {
+  if (!bambinoIdInModifica) return;
+  const nome = document.getElementById('m-nome').value;
+  const nascita = document.getElementById('m-nascita').value;
+  if (!nome || !nascita) { alert("Nome e Data di nascita sono obbligatori!"); return; }
+  const settimane = [1,2,3,4,5].filter(n => document.getElementById('m-sett'+n).checked);
+  await updateDoc(doc(db, 'bambini', bambinoIdInModifica), {
+    nome, nascita,
+    gruppo: document.getElementById('m-gruppo').value,
+    indirizzo: document.getElementById('m-indirizzo').value.trim(),
+    classe: document.getElementById('m-classe').value.trim(),
+    taglia: document.getElementById('m-taglia').value,
+    telefono: document.getElementById('m-telefono').value.trim(),
+    allergie: document.getElementById('m-allergie').value.trim(),
+    settimane
+  });
+  chiudiModal('modal-modifica');
+};
+
+window.eliminaBambino = async (id) => {
+  if (confirm("Eliminare definitivamente?")) await deleteDoc(doc(db, 'bambini', id));
+};
+
+window.eliminaAvviso = async (id) => {
+  if (confirm("Eliminare questo avviso?")) await deleteDoc(doc(db, 'avvisi', id));
+};
+
+window.apriImpostazioni = () => {
+  settGruppiTemp = [...dati.gruppi];
+  settGiorniTemp = [...dati.giorni];
+  settProgrammiTemp = dati.programmi.map(p => [...p]);
+  renderSettGruppi(); renderSettGiorni();
+  document.getElementById('modal-impostazioni').classList.add('show');
+};
+
+window.renderSettGruppi = () => {
+  document.getElementById('sett-gruppi-list').innerHTML = settGruppiTemp.map((g,i) =>
+    `<div style="display:flex;gap:5px;margin-bottom:5px"><input type="text" value="${g}" onchange="settGruppiTemp[${i}]=this.value" class="form-input" style="margin:0"><button onclick="settGruppiTemp.splice(${i},1);renderSettGruppi()" style="background:var(--red-light);color:var(--red);border:none;border-radius:8px;padding:5px 10px;cursor:pointer">✕</button></div>`
+  ).join('');
+};
+
+window.renderSettGiorni = () => {
+  document.getElementById('sett-giorni-list').innerHTML = settGiorniTemp.map((g,i) =>
+    `<div style="display:flex;gap:5px;margin-bottom:5px"><input type="text" value="${g}" onchange="settGiorniTemp[${i}]=this.value" class="form-input" style="margin:0"><button onclick="settGiorniTemp.splice(${i},1);settProgrammiTemp.splice(${i},1);renderSettGiorni()" style="background:var(--red-light);color:var(--red);border:none;border-radius:8px;padding:5px 10px;cursor:pointer">✕</button></div>`
+  ).join('');
+};
+
+window.aggiungiGruppo = () => { settGruppiTemp.push("Nuovo Gruppo"); renderSettGruppi(); };
+window.aggiungiGiorno = () => { settGiorniTemp.push("Nuovo Giorno"); settProgrammiTemp.push([]); renderSettGiorni(); };
+
+window.salvaImpostazioni = async () => {
+  await setDoc(doc(db, 'impostazioni', 'config'), {
+    gruppi: settGruppiTemp,
+    giorni: settGiorniTemp,
+    programmi: settProgrammiTemp
+  });
+  chiudiModal('modal-impostazioni');
+};
+
+window.chiudiModal = (id) => document.getElementById(id).classList.remove('show');
+window.apriModaleBambino = () => document.getElementById('modal-bambino').classList.add('show');
+window.apriModaleAttivita = () => document.getElementById('modal-attivita').classList.add('show');
+</script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GREST Santissima Trinità – Iscrizioni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Nunito+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #1a4fa3; --blue-dark: #153d80; --blue-light: #dbeafe; --blue-text: #1e40af;
+    --gold: #d97706; --gold-light: #fef3c7; --green: #16a34a;
+    --red: #dc2626; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+    --gray-400: #9ca3af; --gray-500: #6b7280; --gray-700: #374151; --gray-900: #111827;
+    --radius: 10px; --radius-lg: 14px; --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  html, body { height: 100%; font-family: 'Nunito Sans', sans-serif; font-size: 15px; background: var(--gray-100); color: var(--gray-900); }
+  .app-shell { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; background: var(--gray-100); }
+  .header { background: linear-gradient(135deg, #1a4fa3 0%, #153d80 100%); color: white; padding: 1.1rem 1.1rem 0; position: sticky; top: 0; z-index: 50; }
+  .header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 0.15rem; }
+  .header h1 { font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 700; flex: 1; }
+  .badge-ruolo { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); border-radius: 8px; color: white; font-size: 11px; font-weight: 700; padding: 4px 10px; }
+  .tab-bar { display: flex; background: rgba(0,0,0,0.2); border-radius: 8px 8px 0 0; overflow: hidden; margin-top: 10px; }
+  .tab { flex: 1; padding: 0.55rem 0.2rem; text-align: center; font-size: 11px; color: rgba(255,255,255,0.6); cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab i { display: block; font-size: 19px; }
+  .tab.active { color: #fff; border-bottom: 2px solid #ffd700; background: rgba(255,255,255,0.08); }
+  .content { flex: 1; padding: 0.9rem; overflow-y: auto; }
+  .section { display: none; } .section.active { display: block; }
+  .card { background: white; border-radius: var(--radius-lg); padding: 0.9rem 1rem; margin-bottom: 0.75rem; box-shadow: var(--shadow); }
+  .card-title { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .bambino-card { background: white; border-radius: var(--radius-lg); padding: 0.7rem 0.85rem; margin-bottom: 0.55rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
+  .attivita-card { background: white; border-radius: var(--radius-lg); padding: 0.65rem 0.85rem; margin-bottom: 0.45rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; background: var(--blue-light); color: var(--blue-text); flex-shrink: 0; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; background: var(--gray-200); }
+  .badge-avviso { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; background: var(--gold-light); color: var(--gold); }
+  .btn-primary { background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .form-input { width: 100%; padding: 0.5rem 0.75rem; border: 1.5px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 0.8rem; font-family: inherit; font-size: 14px; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: white; border-radius: var(--radius-lg); padding: 1.25rem; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+  .vert-line { width: 4px; border-radius: 4px; align-self: stretch; min-height: 32px; }
+  .line-blu { background: var(--blue); } .line-oro { background: var(--gold); } .line-verde { background: var(--green); }
+  .allergy-warning { color: #dc2626; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 3px; margin-top: 2px; }
+  .avviso-banner { background: linear-gradient(135deg, #fef3c7, #fffbeb); border: 1.5px solid var(--gold); border-radius: var(--radius-lg); padding: 0.85rem 1rem; margin-bottom: 0.6rem; }
+  .avviso-titolo { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; color: var(--gray-900); }
+  .avviso-testo { font-size: 13px; color: var(--gray-700); line-height: 1.45; margin-top: 3px; }
+  .hero-card { background: linear-gradient(135deg, var(--blue-light), #eff6ff); border-radius: var(--radius-lg); padding: 1.2rem; margin-bottom: 0.75rem; border: 1.5px solid #bfdbfe; }
+  .hero-title { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+  .hero-sub { font-size: 13px; color: var(--gray-700); }
+  .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.75rem; }
+  .stat { background: white; border-radius: var(--radius-lg); padding: 0.75rem 0.9rem; box-shadow: var(--shadow); }
+  .stat-label { font-size: 11px; color: var(--gray-500); font-weight: 600; }
+  .stat-value { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 700; color: var(--blue); }
+  .vuoto { text-align: center; padding: 16px; color: var(--gray-400); font-size: 13px; }
+  .loading { text-align: center; padding: 30px; color: var(--gray-400); font-size: 13px; }
+  #easter-egg { display: none; position: fixed; inset: 0; background: white; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: 'Nunito', sans-serif; }
+  #easter-egg.show { display: flex; }
+  .close-egg { position: absolute; top: 20px; left: 20px; font-size: 30px; cursor: pointer; color: black; border: none; background: none; }
+</style>
+</head>
+<body>
+
+<div id="easter-egg">
+  <button class="close-egg" onclick="toggleEgg(false)">✕</button>
+  <h1 style="font-size: 50px; color: rgb(60, 4, 97); font-weight: 900; padding: 20px;">Grest 2026 ✝</h1>
+</div>
+
+<div class="app-shell">
+  <div class="header">
+    <div class="header-top">
+      <span style="font-size:24px; cursor:pointer" id="logo-icon">✝</span>
+      <h1>GREST Santissima Trinità</h1>
+      <span class="badge-ruolo">👨‍👩‍👧 Genitori</span>
+    </div>
+    <div class="tab-bar">
+      <div class="tab active" onclick="showTab('home',this)"><i class="ti ti-home"></i>Home</div>
+      <div class="tab" onclick="showTab('iscrizioni',this)"><i class="ti ti-users"></i>I miei bambini</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section active" id="sec-home">
+      <div class="hero-card">
+        <div class="hero-title">Benvenuto al GREST 2026! 🎉</div>
+        <div class="hero-sub">Parrocchia Santissima Trinità — qui trovi avvisi e programma.</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-label">Bambini iscritti</div><div class="stat-value" id="dash-tot">—</div></div>
+        <div class="stat"><div class="stat-label">Avvisi</div><div class="stat-value" id="dash-navvisi" style="color:var(--gold)">—</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-bell"></i> Avvisi degli animatori</div>
+        <div id="lista-avvisi"><div class="loading">Caricamento...</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-calendar"></i> Programma</div>
+        <select id="giorno-select" class="form-input" onchange="renderProgramma()" style="margin-bottom:10px"></select>
+        <div id="lista-attivita"><div class="loading">Caricamento...</div></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-iscrizioni">
+      <button class="btn-primary" style="width:100%; justify-content:center; margin-bottom:1rem" onclick="apriModaleBambino()"><i class="ti ti-plus"></i> Iscrivi un bambino</button>
+      <div id="lista-bambini"><div class="loading">Caricamento...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AGGIUNGI -->
+<div class="modal-overlay" id="modal-bambino">
+  <div class="modal">
+    <h2 style="margin-bottom:15px">🧒 Iscrivi un Bambino</h2>
+    <label style="font-size:12px; font-weight:700">Nome e Cognome *</label>
+    <input type="text" id="b-nome" placeholder="Es: Stella Mira Cordana" class="form-input">
+    <label style="font-size:12px; font-weight:700">Data di Nascita *</label>
+    <input type="text" id="b-nascita" placeholder="Es: 11-09-2009" class="form-input" onfocus="(this.type='date')" onblur="(this.value==''?this.type='text':this.type='date')">
+    <label style="font-size:12px; font-weight:700">Gruppo</label>
+    <select id="b-gruppo" class="form-input"></select>
+    <label style="font-size:12px; font-weight:700">Via e Numero Civico</label>
+    <input type="text" id="b-indirizzo" placeholder="Es: Via Roma 12" class="form-input">
+    <label style="font-size:12px; font-weight:700">Classe Frequentata</label>
+    <input type="text" id="b-classe" placeholder="Es: 3ª Elementare" class="form-input">
+    <label style="font-size:12px; font-weight:700">Taglia Maglietta</label>
+    <select id="b-taglia" class="form-input">
+      <option value="">-- Seleziona --</option>
+      <option value="S">S</option><option value="M">M</option>
+      <option value="L">L</option><option value="XL">XL</option>
+    </select>
+    <label style="font-size:12px; font-weight:700">Telefono Genitore</label>
+    <input type="tel" id="b-telefono" placeholder="Es: 333 1234567" class="form-input">
+    <label style="font-size:12px; font-weight:700">Settimane di Partecipazione</label>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:0.8rem">
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett1"> Sett. 1</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett2"> Sett. 2</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett3"> Sett. 3</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett4"> Sett. 4</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett5"> Sett. 5</label>
+    </div>
+    <label style="font-size:12px; font-weight:700; color:var(--red)">Eventuali Allergie / Note Mediche</label>
+    <textarea id="b-allergie" placeholder="Es: Celiachia, allergie varie o lascia vuoto" class="form-input" style="height:60px"></textarea>
+    <div style="display:flex; gap:10px; margin-top:10px">
+      <button class="btn-primary" style="flex:1" onclick="salvaBambino()">Iscrivi</button>
+      <button onclick="chiudiModal('modal-bambino')" style="background:var(--gray-200); border:none; padding:10px; border-radius:10px; cursor:pointer">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MODIFICA -->
+<div class="modal-overlay" id="modal-modifica">
+  <div class="modal">
+    <h2 style="margin-bottom:15px">✏️ Modifica Bambino</h2>
+    <label style="font-size:12px; font-weight:700">Nome e Cognome *</label>
+    <input type="text" id="m-nome" class="form-input">
+    <label style="font-size:12px; font-weight:700">Data di Nascita *</label>
+    <input type="date" id="m-nascita" class="form-input">
+    <label style="font-size:12px; font-weight:700">Gruppo</label>
+    <select id="m-gruppo" class="form-input"></select>
+    <label style="font-size:12px; font-weight:700">Via e Numero Civico</label>
+    <input type="text" id="m-indirizzo" class="form-input">
+    <label style="font-size:12px; font-weight:700">Classe Frequentata</label>
+    <input type="text" id="m-classe" class="form-input">
+    <label style="font-size:12px; font-weight:700">Taglia Maglietta</label>
+    <select id="m-taglia" class="form-input">
+      <option value="">-- Seleziona --</option>
+      <option value="S">S</option><option value="M">M</option>
+      <option value="L">L</option><option value="XL">XL</option>
+    </select>
+    <label style="font-size:12px; font-weight:700">Telefono Genitore</label>
+    <input type="tel" id="m-telefono" class="form-input">
+    <label style="font-size:12px; font-weight:700">Settimane di Partecipazione</label>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:0.8rem">
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="m-sett1"> Sett. 1</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="m-sett2"> Sett. 2</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="m-sett3"> Sett. 3</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="m-sett4"> Sett. 4</label>
+      <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="m-sett5"> Sett. 5</label>
+    </div>
+    <label style="font-size:12px; font-weight:700; color:var(--red)">Allergie / Note Mediche</label>
+    <textarea id="m-allergie" class="form-input" style="height:60px"></textarea>
+    <div style="display:flex; gap:10px; margin-top:10px">
+      <button class="btn-primary" style="flex:1" onclick="salvaModifica()">Salva Modifiche</button>
+      <button onclick="chiudiModal('modal-modifica')" style="background:var(--gray-200); border:none; padding:10px; border-radius:10px; cursor:pointer">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBLsK6_odHquTHAUy3xDSI1pqic940zUdI",
+  authDomain: "grest2026-69dd7.firebaseapp.com",
+  projectId: "grest2026-69dd7",
+  storageBucket: "grest2026-69dd7.firebasestorage.app",
+  messagingSenderId: "1007701251982",
+  appId: "1:1007701251982:web:1ea1dc09c08d994703b6df"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let dati = { bambini: [], avvisi: [], gruppi: ["Generale"], giorni: ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"], programmi: [[],[],[],[],[]] };
+let bambinoIdInModifica = null;
+
+// Easter egg
+let countClicks = 0, lastClickTime = 0;
+document.getElementById('logo-icon').addEventListener('click', () => {
+  const now = Date.now();
+  countClicks = (now - lastClickTime > 500) ? 1 : countClicks + 1;
+  lastClickTime = now;
+  if (countClicks === 5) { countClicks = 0; toggleEgg(true); }
+});
+window.toggleEgg = (show) => document.getElementById('easter-egg').classList.toggle('show', show);
+
+window.showTab = (name, el) => {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  el.classList.add('active');
+};
+
+// Ascolta bambini in tempo reale
+onSnapshot(collection(db, 'bambini'), snap => {
+  dati.bambini = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderBambini();
+  document.getElementById('dash-tot').textContent = dati.bambini.length;
+});
+
+// Ascolta avvisi in tempo reale
+onSnapshot(query(collection(db, 'avvisi'), orderBy('timestamp', 'desc')), snap => {
+  dati.avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderAvvisi();
+  document.getElementById('dash-navvisi').textContent = dati.avvisi.length;
+});
+
+// Ascolta impostazioni (gruppi, giorni, programma)
+onSnapshot(doc(db, 'impostazioni', 'config'), snap => {
+  if (snap.exists()) {
+    const d = snap.data();
+    if (d.gruppi) dati.gruppi = d.gruppi;
+    if (d.giorni) dati.giorni = d.giorni;
+    if (d.programmi) dati.programmi = d.programmi;
+    aggiornaSelect();
+    renderProgramma();
+  }
+});
+
+function aggiornaSelect() {
+  const gSel = document.getElementById('giorno-select');
+  const old = gSel.value;
+  gSel.innerHTML = dati.giorni.map((g,i) => `<option value="${i}">${g}</option>`).join('');
+  if (old && old < dati.giorni.length) gSel.value = old;
+  document.getElementById('b-gruppo').innerHTML = dati.gruppi.map(g => `<option>${g}</option>`).join('');
+}
+
+function renderBambini() {
+  const html = dati.bambini.map(b => {
+    let dataDisplay = b.nascita ? b.nascita.split('-').reverse().join('/') : "";
+    return `<div class="bambino-card">
+      <div class="avatar">${b.nome[0]}</div>
+      <div style="flex:1">
+        <b>${b.nome}</b><br>
+        <small style="color:var(--gray-500)">${dataDisplay}${b.classe ? ' · '+b.classe : ''}</small>
+        ${b.allergie ? `<div class="allergy-warning"><i class="ti ti-alert-triangle"></i> ${b.allergie}</div>` : ''}
+      </div>
+      <span class="badge">${b.gruppo||''}</span>
+      <button onclick="apriModifica('${b.id}')" style="color:var(--blue);border:none;background:none;cursor:pointer;padding:5px;font-size:16px">✏️</button>
+      <button onclick="eliminaBambino('${b.id}')" style="color:red;border:none;background:none;cursor:pointer;padding:5px">✕</button>
+    </div>`;
+  }).join('');
+  document.getElementById('lista-bambini').innerHTML = html || '<div class="vuoto">Nessun bambino iscritto ancora.<br>Clicca il pulsante qui sopra!</div>';
+}
+
+window.renderProgramma = () => {
+  const dayIdx = document.getElementById('giorno-select').value;
+  const lista = dati.programmi[dayIdx] || [];
+  const sorted = [...lista].sort((a,b) => a.orario.localeCompare(b.orario));
+  document.getElementById('lista-attivita').innerHTML = sorted.length
+    ? sorted.map(a => `<div class="attivita-card"><div style="font-size:12px;font-weight:700;color:var(--blue);min-width:38px">${a.orario}</div><div class="vert-line ${a.colore}"></div><div style="flex:1"><b style="font-size:13px">${a.nome}</b><br><small style="color:var(--gray-500)">${a.det}</small></div></div>`).join('')
+    : '<div class="vuoto">Nessuna attività per questo giorno</div>';
+};
+
+function renderAvvisi() {
+  document.getElementById('lista-avvisi').innerHTML = dati.avvisi.length
+    ? dati.avvisi.map(a => `<div class="avviso-banner">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+          <div class="avviso-titolo">🔔 ${a.titolo}</div>
+          <span style="font-size:10px;color:var(--gray-500);white-space:nowrap">${a.data||''}</span>
+        </div>
+        <div class="avviso-testo">${a.testo}</div>
+        <div style="margin-top:6px"><span class="badge-avviso">Per: ${a.dest||'Tutti'}</span></div>
+      </div>`).join('')
+    : '<div class="vuoto">Nessun avviso al momento</div>';
+}
+
+window.salvaBambino = async () => {
+  const nome = document.getElementById('b-nome').value.trim();
+  const nascita = document.getElementById('b-nascita').value;
+  if (!nome || !nascita) { alert("Nome e Data di nascita sono obbligatori!"); return; }
+  const settimane = [1,2,3,4,5].filter(n => document.getElementById('b-sett'+n).checked);
+  await addDoc(collection(db, 'bambini'), {
+    nome, nascita,
+    gruppo: document.getElementById('b-gruppo').value,
+    allergie: document.getElementById('b-allergie').value.trim(),
+    indirizzo: document.getElementById('b-indirizzo').value.trim(),
+    classe: document.getElementById('b-classe').value.trim(),
+    taglia: document.getElementById('b-taglia').value,
+    telefono: document.getElementById('b-telefono').value.trim(),
+    settimane, presente: false
+  });
+  ['b-nome','b-allergie','b-indirizzo','b-classe','b-telefono'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('b-nascita').value=''; document.getElementById('b-nascita').type='text';
+  document.getElementById('b-taglia').value='';
+  [1,2,3,4,5].forEach(n => document.getElementById('b-sett'+n).checked=false);
+  chiudiModal('modal-bambino');
+};
+
+window.apriModifica = (id) => {
+  bambinoIdInModifica = id;
+  const b = dati.bambini.find(x => x.id === id);
+  if (!b) return;
+  document.getElementById('m-nome').value = b.nome||'';
+  document.getElementById('m-nascita').value = b.nascita||'';
+  document.getElementById('m-indirizzo').value = b.indirizzo||'';
+  document.getElementById('m-classe').value = b.classe||'';
+  document.getElementById('m-taglia').value = b.taglia||'';
+  document.getElementById('m-telefono').value = b.telefono||'';
+  document.getElementById('m-allergie').value = b.allergie||'';
+  document.getElementById('m-gruppo').innerHTML = dati.gruppi.map(g=>`<option ${g===b.gruppo?'selected':''}>${g}</option>`).join('');
+  [1,2,3,4,5].forEach(n => document.getElementById('m-sett'+n).checked = b.settimane && b.settimane.includes(n));
+  document.getElementById('modal-modifica').classList.add('show');
+};
+
+window.salvaModifica = async () => {
+  if (!bambinoIdInModifica) return;
+  const nome = document.getElementById('m-nome').value;
+  const nascita = document.getElementById('m-nascita').value;
+  if (!nome || !nascita) { alert("Nome e Data di nascita sono obbligatori!"); return; }
+  const settimane = [1,2,3,4,5].filter(n => document.getElementById('m-sett'+n).checked);
+  await updateDoc(doc(db, 'bambini', bambinoIdInModifica), {
+    nome, nascita,
+    gruppo: document.getElementById('m-gruppo').value,
+    indirizzo: document.getElementById('m-indirizzo').value.trim(),
+    classe: document.getElementById('m-classe').value.trim(),
+    taglia: document.getElementById('m-taglia').value,
+    telefono: document.getElementById('m-telefono').value.trim(),
+    allergie: document.getElementById('m-allergie').value.trim(),
+    settimane
+  });
+  chiudiModal('modal-modifica');
+};
+
+window.eliminaBambino = async (id) => {
+  if (confirm("Vuoi rimuovere questa iscrizione?")) {
+    await deleteDoc(doc(db, 'bambini', id));
+  }
+};
+
+window.chiudiModal = (id) => document.getElementById(id).classList.remove('show');
+window.apriModaleBambino = () => document.getElementById('modal-bambino').classList.add('show');
+
+aggiornaSelect();
+</script>
+</body>
+</html>
