@@ -25,9 +25,11 @@
   .btn-settings { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; color: white; cursor: pointer; padding: 5px 8px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
   .badge-ruolo { background: rgba(124,58,237,0.35); border: 1px solid rgba(167,139,250,0.5); border-radius: 8px; color: #ddd6fe; font-size: 10px; font-weight: 700; padding: 3px 8px; white-space: nowrap; }
   .tab-bar { display: flex; background: rgba(0,0,0,0.2); border-radius: 8px 8px 0 0; overflow: hidden; margin-top: 10px; }
-  .tab { flex: 1; padding: 0.55rem 0.2rem; text-align: center; font-size: 11px; color: rgba(255,255,255,0.6); cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab { flex: 1; padding: 0.55rem 0.2rem; text-align: center; font-size: 11px; color: rgba(255,255,255,0.6); cursor: pointer; border-bottom: 2px solid transparent; position: relative; }
   .tab i { display: block; font-size: 19px; }
   .tab.active { color: #fff; border-bottom: 2px solid #ffd700; background: rgba(255,255,255,0.08); }
+  .tab-badge { position: absolute; top: 4px; right: 8px; background: #ef4444; color: white; border-radius: 99px; font-size: 9px; font-weight: 700; padding: 1px 5px; min-width: 16px; text-align: center; display: none; }
+  .tab-badge.show { display: block; }
   .content { flex: 1; padding: 0.9rem; overflow-y: auto; }
   .section { display: none; } .section.active { display: block; }
   .card { background: white; border-radius: var(--radius-lg); padding: 0.9rem 1rem; margin-bottom: 0.75rem; box-shadow: var(--shadow); }
@@ -39,10 +41,13 @@
   .bambino-card { background: white; border-radius: var(--radius-lg); padding: 0.7rem 0.85rem; margin-bottom: 0.55rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
   .bambino-card.presente { border-left: 5px solid var(--green); background: #f0fff4; }
   .attivita-card { background: white; border-radius: var(--radius-lg); padding: 0.7rem 0.85rem; margin-bottom: 0.55rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
+  .attivita-card.oggi { border-left: 4px solid var(--gold); background: #fffbeb; }
   .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; background: var(--blue-light); color: var(--blue-text); flex-shrink: 0; }
   .badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; background: var(--gray-200); }
   .btn-primary { background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
   .btn-success { background: var(--green); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .btn-danger { background: var(--red); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .btn-ghost { background: var(--gray-100); color: var(--gray-700); border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 0.45rem 0.8rem; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
   .form-input { width: 100%; padding: 0.5rem 0.75rem; border: 1.5px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 0.8rem; font-family: inherit; font-size: 14px; }
   .form-input:focus { outline: none; border-color: var(--blue); }
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
@@ -57,8 +62,13 @@
   .avviso-card { background: white; border-radius: var(--radius-lg); padding: 0.85rem 1rem; margin-bottom: 0.6rem; box-shadow: var(--shadow); border-left: 4px solid var(--gold); }
   .comm-compose { background: linear-gradient(135deg, #f0f7ff, #e8f4ff); border: 1.5px solid #bfdbfe; border-radius: var(--radius-lg); padding: 1rem; margin-bottom: 0.75rem; }
   .comm-compose-title { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; color: var(--blue); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .taglie-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 6px; }
+  .taglia-box { background: var(--blue-light); border-radius: var(--radius); padding: 8px 4px; text-align: center; }
+  .taglia-box .t-label { font-size: 10px; color: var(--blue-text); font-weight: 700; }
+  .taglia-box .t-val { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 700; color: var(--blue); }
   .vuoto { text-align: center; padding: 16px; color: var(--gray-400); font-size: 13px; }
   .loading { text-align: center; padding: 30px; color: var(--gray-400); font-size: 13px; }
+  .oggi-pill { background: var(--gold-light); color: var(--gold); border-radius: 99px; font-size: 10px; font-weight: 700; padding: 2px 8px; margin-left: 6px; }
   .pwd-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #1a4fa3, #153d80); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 2rem; }
   .pwd-box { background: white; border-radius: 20px; padding: 2rem; width: 100%; max-width: 340px; text-align: center; }
   .pwd-title { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
@@ -79,7 +89,7 @@
   <div class="pwd-box">
     <div style="font-size:40px; margin-bottom:10px">✝</div>
     <div class="pwd-title">GREST 2026</div>
-    <div class="pwd-sub">Area Animatori — inserisci la password</div>
+    <div class="pwd-sub">Area Animatori</div>
     <input type="password" id="pwd-input" class="form-input" placeholder="Password" onkeydown="if(event.key==='Enter') verificaPwd()">
     <button class="btn-primary" style="width:100%; justify-content:center" onclick="verificaPwd()">Entra</button>
     <div id="pwd-error" style="color:var(--red); font-size:12px; margin-top:8px; display:none">Password errata</div>
@@ -98,16 +108,30 @@
       <div class="tab active" onclick="showTab('dashboard',this)"><i class="ti ti-home"></i>Home</div>
       <div class="tab" onclick="showTab('iscrizioni',this)"><i class="ti ti-users"></i>Bambini</div>
       <div class="tab" onclick="showTab('programma',this)"><i class="ti ti-calendar"></i>Programma</div>
-      <div class="tab" onclick="showTab('comunicazioni',this)"><i class="ti ti-message"></i>Avvisi</div>
+      <div class="tab" onclick="showTab('comunicazioni',this)"><i class="ti ti-message"></i>Avvisi<span class="tab-badge" id="badge-avvisi">0</span></div>
     </div>
   </div>
 
   <div class="content">
+
+    <!-- DASHBOARD -->
     <div class="section active" id="sec-dashboard">
       <div class="stats">
         <div class="stat"><div class="stat-label">Iscritti Totali</div><div class="stat-value" id="dash-tot">—</div></div>
         <div class="stat"><div class="stat-label">Presenti Oggi</div><div class="stat-value" id="dash-presenti" style="color:var(--green)">—</div></div>
       </div>
+
+      <!-- RIEPILOGO TAGLIE -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-shirt"></i> Riepilogo Taglie</div>
+        <div class="taglie-grid">
+          <div class="taglia-box"><div class="t-label">S</div><div class="t-val" id="t-S">0</div></div>
+          <div class="taglia-box"><div class="t-label">M</div><div class="t-val" id="t-M">0</div></div>
+          <div class="taglia-box"><div class="t-label">L</div><div class="t-val" id="t-L">0</div></div>
+          <div class="taglia-box"><div class="t-label">XL</div><div class="t-val" id="t-XL">0</div></div>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-title"><i class="ti ti-bell"></i> Ultimi avvisi</div>
         <div id="dash-avvisi-list"><div class="loading">Caricamento...</div></div>
@@ -116,8 +140,19 @@
         <div class="card-title"><i class="ti ti-alert-triangle" style="color:var(--red)"></i> Allergie / Note mediche</div>
         <div id="dash-allergie-list"><div class="loading">Caricamento...</div></div>
       </div>
+
+      <!-- RESET PRESENZE -->
+      <button class="btn-danger" style="width:100%; justify-content:center; margin-bottom:0.75rem" onclick="resetPresenze()">
+        <i class="ti ti-refresh"></i> Reset presenze di oggi
+      </button>
+
+      <!-- ESPORTA CSV -->
+      <button class="btn-ghost" style="width:100%; justify-content:center" onclick="esportaCSV()">
+        <i class="ti ti-download"></i> Esporta lista bambini (CSV)
+      </button>
     </div>
 
+    <!-- BAMBINI -->
     <div class="section" id="sec-iscrizioni">
       <div style="display:flex; gap:8px; margin-bottom:0.6rem">
         <input type="text" id="search-input" placeholder="Cerca bambino..." class="form-input" style="margin:0" oninput="renderBambini()">
@@ -127,6 +162,7 @@
       <div id="lista-bambini"><div class="loading">Caricamento...</div></div>
     </div>
 
+    <!-- PROGRAMMA -->
     <div class="section" id="sec-programma">
       <div style="display:flex; gap:8px; margin-bottom:1rem">
         <select id="giorno-select" class="form-input" style="margin:0" onchange="renderProgramma()"></select>
@@ -135,6 +171,7 @@
       <div id="lista-attivita"><div class="loading">Caricamento...</div></div>
     </div>
 
+    <!-- COMUNICAZIONI -->
     <div class="section" id="sec-comunicazioni">
       <div class="comm-compose">
         <div class="comm-compose-title"><i class="ti ti-send" style="font-size:18px"></i> Nuova Comunicazione</div>
@@ -147,6 +184,7 @@
       </div>
       <div id="lista-avvisi"></div>
     </div>
+
   </div>
 </div>
 
@@ -227,7 +265,6 @@
   </div>
 </div>
 
-<!-- MODAL ATTIVITA: senza scelta colore -->
 <div class="modal-overlay" id="modal-attivita">
   <div class="modal">
     <h2 style="margin-bottom:15px">➕ Nuova Attività</h2>
@@ -247,6 +284,8 @@
 <div class="modal-overlay" id="modal-impostazioni">
   <div class="modal">
     <h2 style="margin-bottom:15px">⚙️ Impostazioni</h2>
+    <label style="font-size:12px; font-weight:700">🔑 Cambia Password:</label>
+    <input type="password" id="sett-pwd-nuova" placeholder="Nuova password (lascia vuoto per non cambiare)" class="form-input">
     <label style="font-size:12px; font-weight:700">Gruppi:</label>
     <div id="sett-gruppi-list"></div>
     <button onclick="aggiungiGruppo()" class="btn-primary" style="padding:5px 10px; font-size:12px; margin-bottom:12px">+ Gruppo</button>
@@ -262,10 +301,10 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy, writeBatch, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-const PASSWORD = "grest2026";
 const COLORI = ["line-blu", "line-oro", "line-verde"];
+let passwordCorrente = localStorage.getItem('grest_pwd') || "grest2026";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBLsK6_odHquTHAUy3xDSI1pqic940zUdI",
@@ -282,14 +321,12 @@ const db = getFirestore(app);
 let dati = { bambini: [], avvisi: [], gruppi: ["Generale"], giorni: ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"], programmi: [[],[],[],[],[]] };
 let currentFilter = 'tutti';
 let bambinoIdInModifica = null;
-let settGruppiTemp = [];
-let settGiorniTemp = [];
-let settProgrammiTemp = [];
-let configCaricata = false;
+let settGruppiTemp = [], settGiorniTemp = [], settProgrammiTemp = [];
+let avvisiVistiCount = parseInt(localStorage.getItem('grest_avvisi_visti') || '0');
 
 window.verificaPwd = () => {
   const val = document.getElementById('pwd-input').value;
-  if (val === PASSWORD) {
+  if (val === passwordCorrente) {
     document.getElementById('pwd-screen').style.display = 'none';
     document.getElementById('main-app').style.display = 'flex';
     avviaFirebase();
@@ -308,45 +345,36 @@ function avviaFirebase() {
     if (countClicks === 5) { countClicks = 0; toggleEgg(true); }
   });
 
-  // Bambini
   onSnapshot(collection(db, 'bambini'), snap => {
     dati.bambini = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderBambini();
     renderDashboard();
   });
 
-  // Avvisi
   onSnapshot(query(collection(db, 'avvisi'), orderBy('timestamp', 'desc')), snap => {
     dati.avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAvvisi();
     renderDashboard();
+    // Badge avvisi nuovi
+    const nuovi = dati.avvisi.length - avvisiVistiCount;
+    const badge = document.getElementById('badge-avvisi');
+    if (nuovi > 0) { badge.textContent = nuovi; badge.classList.add('show'); }
+    else { badge.classList.remove('show'); }
   });
 
-  // Impostazioni (gruppi, giorni, programma)
   onSnapshot(doc(db, 'impostazioni', 'config'), snap => {
     if (snap.exists()) {
       const d = snap.data();
       if (d.gruppi) dati.gruppi = d.gruppi;
       if (d.giorni) dati.giorni = d.giorni;
-      // programmi è un array di array salvato come oggetto su Firestore
       if (d.programmi) {
-        // Supporta sia array che oggetto {0:[...], 1:[...]}
-        if (Array.isArray(d.programmi)) {
-          dati.programmi = d.programmi;
-        } else {
-          const len = dati.giorni.length;
-          dati.programmi = Array.from({length: len}, (_, i) => d.programmi[i] || []);
-        }
+        dati.programmi = Array.isArray(d.programmi)
+          ? d.programmi
+          : Array.from({length: dati.giorni.length}, (_, i) => d.programmi[i] || []);
       }
     } else {
-      // Prima volta: crea il documento di config
-      setDoc(doc(db, 'impostazioni', 'config'), {
-        gruppi: dati.gruppi,
-        giorni: dati.giorni,
-        programmi: dati.programmi
-      });
+      setDoc(doc(db, 'impostazioni', 'config'), { gruppi: dati.gruppi, giorni: dati.giorni, programmi: dati.programmi });
     }
-    configCaricata = true;
     aggiornaSelect();
     renderProgramma();
   });
@@ -355,8 +383,13 @@ function avviaFirebase() {
 function aggiornaSelect() {
   const gSel = document.getElementById('giorno-select');
   const old = gSel.value;
-  gSel.innerHTML = dati.giorni.map((g,i) => `<option value="${i}">${g}</option>`).join('');
+  // Evidenzia giorno di oggi
+  const giornoOggi = new Date().getDay(); // 0=dom, 1=lun...
+  const mapGiorni = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4 };
+  const idxOggi = mapGiorni[giornoOggi];
+  gSel.innerHTML = dati.giorni.map((g,i) => `<option value="${i}">${g}${i === idxOggi ? ' ★ oggi' : ''}</option>`).join('');
   if (old !== "" && parseInt(old) < dati.giorni.length) gSel.value = old;
+  else if (idxOggi !== undefined && idxOggi < dati.giorni.length) gSel.value = idxOggi;
   document.getElementById('b-gruppo').innerHTML = dati.gruppi.map(g => `<option>${g}</option>`).join('');
   document.getElementById('msg-dest').innerHTML = '<option>Tutti</option>' + dati.gruppi.map(g => `<option>${g}</option>`).join('');
   const filterRow = document.getElementById('filter-row');
@@ -372,6 +405,12 @@ window.showTab = (name, el) => {
   document.getElementById('sec-'+name).classList.add('active');
   el.classList.add('active');
   if (name === 'programma') renderProgramma();
+  if (name === 'comunicazioni') {
+    // Segna avvisi come visti
+    avvisiVistiCount = dati.avvisi.length;
+    localStorage.setItem('grest_avvisi_visti', avvisiVistiCount);
+    document.getElementById('badge-avvisi').classList.remove('show');
+  }
 };
 
 window.setFilter = (f) => { currentFilter = f; aggiornaSelect(); renderBambini(); };
@@ -379,9 +418,16 @@ window.setFilter = (f) => { currentFilter = f; aggiornaSelect(); renderBambini()
 function renderDashboard() {
   document.getElementById('dash-tot').textContent = dati.bambini.length;
   document.getElementById('dash-presenti').textContent = dati.bambini.filter(b => b.presente).length;
+
+  // Taglie
+  ['S','M','L','XL'].forEach(t => {
+    document.getElementById('t-'+t).textContent = dati.bambini.filter(b => b.taglia === t).length;
+  });
+
   document.getElementById('dash-avvisi-list').innerHTML = dati.avvisi.length
     ? dati.avvisi.slice(0,3).map(a => `<div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--gray-100)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:5px;flex-shrink:0"></div><div><b style="font-size:13px">${a.titolo}</b>: ${(a.testo||'').substring(0,40)}...<div style="font-size:11px;color:gray">${a.data||''}</div></div></div>`).join('')
     : '<div class="vuoto">Nessun avviso</div>';
+
   const conAllergie = dati.bambini.filter(b => b.allergie && b.allergie.trim());
   document.getElementById('dash-allergie-list').innerHTML = conAllergie.length
     ? conAllergie.map(b => `<div style="display:flex;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid var(--gray-100)"><div class="avatar" style="width:28px;height:28px;font-size:11px">${b.nome[0]}</div><div><b style="font-size:13px">${b.nome}</b><div style="color:#dc2626;font-size:11px;font-weight:700">⚠️ ${b.allergie}</div></div></div>`).join('')
@@ -419,13 +465,22 @@ window.renderProgramma = () => {
   const dayIdx = parseInt(document.getElementById('giorno-select').value) || 0;
   const lista = (dati.programmi[dayIdx]) || [];
   const sorted = [...lista].sort((a,b) => (a.orario||'').localeCompare(b.orario||''));
+  // Orario attuale per evidenziare attività in corso
+  const now = new Date();
+  const oraOggi = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  const giornoOggi = new Date().getDay();
+  const mapGiorni = {1:0,2:1,3:2,4:3,5:4};
+  const isOggi = mapGiorni[giornoOggi] === dayIdx;
   document.getElementById('lista-attivita').innerHTML = sorted.length
-    ? sorted.map((a,i) => `<div class="attivita-card">
-        <div style="font-size:13px;font-weight:700;color:var(--blue);min-width:40px">${a.orario||''}</div>
-        <div class="vert-line ${a.colore||'line-blu'}"></div>
-        <div style="flex:1"><b>${a.nome||''}</b><br><small style="color:var(--gray-500)">${a.det||''}</small></div>
-        <button onclick="eliminaAttivita(${dayIdx},${i})" style="color:red;border:none;background:none;cursor:pointer;padding:5px;font-size:18px">✕</button>
-      </div>`).join('')
+    ? sorted.map((a,i) => {
+        const inCorso = isOggi && a.orario <= oraOggi;
+        return `<div class="attivita-card ${inCorso?'oggi':''}">
+          <div style="font-size:13px;font-weight:700;color:var(--blue);min-width:40px">${a.orario||''}${inCorso?'<div style="font-size:9px;color:var(--gold);font-weight:700">ORA</div>':''}</div>
+          <div class="vert-line ${a.colore||'line-blu'}"></div>
+          <div style="flex:1"><b>${a.nome||''}</b><br><small style="color:var(--gray-500)">${a.det||''}</small></div>
+          <button onclick="eliminaAttivita(${dayIdx},${i})" style="color:red;border:none;background:none;cursor:pointer;padding:5px;font-size:18px">✕</button>
+        </div>`;
+      }).join('')
     : '<div class="vuoto">Nessuna attività. Aggiungine una con +</div>';
 };
 
@@ -445,6 +500,30 @@ function renderAvvisi() {
     : '<div class="vuoto">Nessuna comunicazione inviata</div>';
 }
 
+window.resetPresenze = async () => {
+  if (!confirm("Azzerare tutte le presenze di oggi?")) return;
+  const batch = writeBatch(db);
+  dati.bambini.forEach(b => {
+    if (b.presente) batch.update(doc(db, 'bambini', b.id), { presente: false });
+  });
+  await batch.commit();
+};
+
+window.esportaCSV = () => {
+  const header = ['Nome','Data Nascita','Gruppo','Classe','Taglia','Telefono','Allergie','Indirizzo','Settimane','Codice Famiglia'];
+  const righe = dati.bambini.map(b => [
+    b.nome||'', b.nascita||'', b.gruppo||'', b.classe||'', b.taglia||'',
+    b.telefono||'', b.allergie||'', b.indirizzo||'',
+    (b.settimane||[]).join(';'), b.codiceFamiglia||''
+  ].map(v => `"${v}"`).join(','));
+  const csv = [header.join(','), ...righe].join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'bambini-grest2026.csv';
+  a.click(); URL.revokeObjectURL(url);
+};
+
 window.togglePresenza = async (id, val) => {
   await updateDoc(doc(db, 'bambini', id), { presente: val });
 };
@@ -455,8 +534,7 @@ window.salvaBambino = async () => {
   if (!nome || !nascita) { alert("Nome e Data di nascita sono obbligatori!"); return; }
   const settimane = [1,2,3,4,5].filter(n => document.getElementById('b-sett'+n).checked);
   await addDoc(collection(db, 'bambini'), {
-    nome, nascita,
-    gruppo: document.getElementById('b-gruppo').value,
+    nome, nascita, gruppo: document.getElementById('b-gruppo').value,
     allergie: document.getElementById('b-allergie').value.trim(),
     indirizzo: document.getElementById('b-indirizzo').value.trim(),
     classe: document.getElementById('b-classe').value.trim(),
@@ -476,10 +554,9 @@ window.salvaAttivita = async () => {
   const nome = document.getElementById('att-nome-input').value.trim();
   if (!nome) { alert("Inserisci il nome dell'attività!"); return; }
   const dayIdx = parseInt(document.getElementById('giorno-select').value) || 0;
-  // Colore automatico in rotazione
   const lista = dati.programmi[dayIdx] || [];
   const colore = COLORI[lista.length % COLORI.length];
-  const nuoviProgrammi = dati.programmi.map((p, i) => i === dayIdx ? [...(p||[]), { orario, nome, det: document.getElementById('att-det-input').value.trim(), colore }] : (p||[]));
+  const nuoviProgrammi = dati.programmi.map((p,i) => i === dayIdx ? [...(p||[]), { orario, nome, det: document.getElementById('att-det-input').value.trim(), colore }] : (p||[]));
   await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: dati.gruppi, giorni: dati.giorni, programmi: nuoviProgrammi }, { merge: true });
   document.getElementById('att-nome-input').value = '';
   document.getElementById('att-det-input').value = '';
@@ -488,7 +565,7 @@ window.salvaAttivita = async () => {
 };
 
 window.eliminaAttivita = async (dayIdx, i) => {
-  const nuovi = dati.programmi.map((p, idx) => idx === dayIdx ? (p||[]).filter((_,j) => j !== i) : (p||[]));
+  const nuovi = dati.programmi.map((p,idx) => idx === dayIdx ? (p||[]).filter((_,j) => j !== i) : (p||[]));
   await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: dati.gruppi, giorni: dati.giorni, programmi: nuovi }, { merge: true });
 };
 
@@ -497,10 +574,8 @@ window.inviaAvviso = async () => {
   const m = document.getElementById('msg-testo-input').value.trim();
   if (!t || !m) { alert("Inserisci titolo e messaggio!"); return; }
   await addDoc(collection(db, 'avvisi'), {
-    titolo: t, testo: m,
-    dest: document.getElementById('msg-dest').value,
-    data: new Date().toLocaleDateString('it-IT'),
-    timestamp: serverTimestamp()
+    titolo: t, testo: m, dest: document.getElementById('msg-dest').value,
+    data: new Date().toLocaleDateString('it-IT'), timestamp: serverTimestamp()
   });
   document.getElementById('msg-titolo-input').value = '';
   document.getElementById('msg-testo-input').value = '';
@@ -529,14 +604,12 @@ window.salvaModifica = async () => {
   if (!nome || !nascita) { alert("Nome e Data di nascita sono obbligatori!"); return; }
   const settimane = [1,2,3,4,5].filter(n => document.getElementById('m-sett'+n).checked);
   await updateDoc(doc(db, 'bambini', bambinoIdInModifica), {
-    nome, nascita,
-    gruppo: document.getElementById('m-gruppo').value,
+    nome, nascita, gruppo: document.getElementById('m-gruppo').value,
     indirizzo: document.getElementById('m-indirizzo').value.trim(),
     classe: document.getElementById('m-classe').value.trim(),
     taglia: document.getElementById('m-taglia').value,
     telefono: document.getElementById('m-telefono').value.trim(),
-    allergie: document.getElementById('m-allergie').value.trim(),
-    settimane
+    allergie: document.getElementById('m-allergie').value.trim(), settimane
   });
   chiudiModal('modal-modifica');
 };
@@ -553,6 +626,7 @@ window.apriImpostazioni = () => {
   settGruppiTemp = [...dati.gruppi];
   settGiorniTemp = [...dati.giorni];
   settProgrammiTemp = dati.programmi.map(p => [...(p||[])]);
+  document.getElementById('sett-pwd-nuova').value = '';
   renderSettGruppi(); renderSettGiorni();
   document.getElementById('modal-impostazioni').classList.add('show');
 };
@@ -573,11 +647,12 @@ window.aggiungiGruppo = () => { settGruppiTemp.push("Nuovo Gruppo"); renderSettG
 window.aggiungiGiorno = () => { settGiorniTemp.push("Nuovo Giorno"); settProgrammiTemp.push([]); renderSettGiorni(); };
 
 window.salvaImpostazioni = async () => {
-  await setDoc(doc(db, 'impostazioni', 'config'), {
-    gruppi: settGruppiTemp,
-    giorni: settGiorniTemp,
-    programmi: settProgrammiTemp
-  });
+  const nuovaPwd = document.getElementById('sett-pwd-nuova').value.trim();
+  if (nuovaPwd.length > 0) {
+    passwordCorrente = nuovaPwd;
+    localStorage.setItem('grest_pwd', nuovaPwd);
+  }
+  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: settGruppiTemp, giorni: settGiorniTemp, programmi: settProgrammiTemp });
   chiudiModal('modal-impostazioni');
 };
 
