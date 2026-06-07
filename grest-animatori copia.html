@@ -47,7 +47,6 @@
   .btn-primary { background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
   .btn-success { background: var(--green); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
   .btn-danger { background: var(--red); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-  .btn-ghost { background: var(--gray-100); color: var(--gray-700); border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 0.45rem 0.8rem; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
   .form-input { width: 100%; padding: 0.5rem 0.75rem; border: 1.5px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 0.8rem; font-family: inherit; font-size: 14px; }
   .form-input:focus { outline: none; border-color: var(--blue); }
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
@@ -68,7 +67,6 @@
   .taglia-box .t-val { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 700; color: var(--blue); }
   .vuoto { text-align: center; padding: 16px; color: var(--gray-400); font-size: 13px; }
   .loading { text-align: center; padding: 30px; color: var(--gray-400); font-size: 13px; }
-  .oggi-pill { background: var(--gold-light); color: var(--gold); border-radius: 99px; font-size: 10px; font-weight: 700; padding: 2px 8px; margin-left: 6px; }
   .pwd-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #1a4fa3, #153d80); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 2rem; }
   .pwd-box { background: white; border-radius: 20px; padding: 2rem; width: 100%; max-width: 340px; text-align: center; }
   .pwd-title { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
@@ -114,14 +112,11 @@
 
   <div class="content">
 
-    <!-- DASHBOARD -->
     <div class="section active" id="sec-dashboard">
       <div class="stats">
         <div class="stat"><div class="stat-label">Iscritti Totali</div><div class="stat-value" id="dash-tot">—</div></div>
         <div class="stat"><div class="stat-label">Presenti Oggi</div><div class="stat-value" id="dash-presenti" style="color:var(--green)">—</div></div>
       </div>
-
-      <!-- RIEPILOGO TAGLIE -->
       <div class="card">
         <div class="card-title"><i class="ti ti-shirt"></i> Riepilogo Taglie</div>
         <div class="taglie-grid">
@@ -131,7 +126,6 @@
           <div class="taglia-box"><div class="t-label">XL</div><div class="t-val" id="t-XL">0</div></div>
         </div>
       </div>
-
       <div class="card">
         <div class="card-title"><i class="ti ti-bell"></i> Ultimi avvisi</div>
         <div id="dash-avvisi-list"><div class="loading">Caricamento...</div></div>
@@ -140,19 +134,11 @@
         <div class="card-title"><i class="ti ti-alert-triangle" style="color:var(--red)"></i> Allergie / Note mediche</div>
         <div id="dash-allergie-list"><div class="loading">Caricamento...</div></div>
       </div>
-
-      <!-- RESET PRESENZE -->
       <button class="btn-danger" style="width:100%; justify-content:center; margin-bottom:0.75rem" onclick="resetPresenze()">
         <i class="ti ti-refresh"></i> Reset presenze di oggi
       </button>
-
-      <!-- ESPORTA CSV -->
-      <button class="btn-ghost" style="width:100%; justify-content:center" onclick="esportaCSV()">
-        <i class="ti ti-download"></i> Esporta lista bambini (CSV)
-      </button>
     </div>
 
-    <!-- BAMBINI -->
     <div class="section" id="sec-iscrizioni">
       <div style="display:flex; gap:8px; margin-bottom:0.6rem">
         <input type="text" id="search-input" placeholder="Cerca bambino..." class="form-input" style="margin:0" oninput="renderBambini()">
@@ -162,7 +148,6 @@
       <div id="lista-bambini"><div class="loading">Caricamento...</div></div>
     </div>
 
-    <!-- PROGRAMMA -->
     <div class="section" id="sec-programma">
       <div style="display:flex; gap:8px; margin-bottom:1rem">
         <select id="giorno-select" class="form-input" style="margin:0" onchange="renderProgramma()"></select>
@@ -171,7 +156,6 @@
       <div id="lista-attivita"><div class="loading">Caricamento...</div></div>
     </div>
 
-    <!-- COMUNICAZIONI -->
     <div class="section" id="sec-comunicazioni">
       <div class="comm-compose">
         <div class="comm-compose-title"><i class="ti ti-send" style="font-size:18px"></i> Nuova Comunicazione</div>
@@ -184,7 +168,6 @@
       </div>
       <div id="lista-avvisi"></div>
     </div>
-
   </div>
 </div>
 
@@ -301,7 +284,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy, writeBatch, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const COLORI = ["line-blu", "line-oro", "line-verde"];
 let passwordCorrente = localStorage.getItem('grest_pwd') || "grest2026";
@@ -318,11 +301,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let dati = { bambini: [], avvisi: [], gruppi: ["Generale"], giorni: ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"], programmi: [[],[],[],[],[]] };
+// Stato globale
+let bambini = [];
+let avvisi = [];
+let gruppi = ["Generale"];
+let giorni = ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"];
+let programmi = [[],[],[],[],[]];
 let currentFilter = 'tutti';
 let bambinoIdInModifica = null;
 let settGruppiTemp = [], settGiorniTemp = [], settProgrammiTemp = [];
 let avvisiVistiCount = parseInt(localStorage.getItem('grest_avvisi_visti') || '0');
+let configPronta = false;
 
 window.verificaPwd = () => {
   const val = document.getElementById('pwd-input').value;
@@ -345,36 +334,44 @@ function avviaFirebase() {
     if (countClicks === 5) { countClicks = 0; toggleEgg(true); }
   });
 
+  // Bambini
   onSnapshot(collection(db, 'bambini'), snap => {
-    dati.bambini = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    bambini = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderBambini();
     renderDashboard();
   });
 
+  // Avvisi — ordinati per timestamp
   onSnapshot(query(collection(db, 'avvisi'), orderBy('timestamp', 'desc')), snap => {
-    dati.avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAvvisi();
     renderDashboard();
-    // Badge avvisi nuovi
-    const nuovi = dati.avvisi.length - avvisiVistiCount;
+    const nuovi = avvisi.length - avvisiVistiCount;
     const badge = document.getElementById('badge-avvisi');
     if (nuovi > 0) { badge.textContent = nuovi; badge.classList.add('show'); }
     else { badge.classList.remove('show'); }
   });
 
+  // Impostazioni (config con giorni, gruppi, programmi)
   onSnapshot(doc(db, 'impostazioni', 'config'), snap => {
     if (snap.exists()) {
       const d = snap.data();
-      if (d.gruppi) dati.gruppi = d.gruppi;
-      if (d.giorni) dati.giorni = d.giorni;
+      if (d.gruppi && d.gruppi.length) gruppi = d.gruppi;
+      if (d.giorni && d.giorni.length) giorni = d.giorni;
       if (d.programmi) {
-        dati.programmi = Array.isArray(d.programmi)
-          ? d.programmi
-          : Array.from({length: dati.giorni.length}, (_, i) => d.programmi[i] || []);
+        // Normalizza: può essere array o oggetto {0:[...], 1:[...]}
+        if (Array.isArray(d.programmi)) {
+          programmi = d.programmi.map(p => Array.isArray(p) ? p : []);
+        } else {
+          programmi = giorni.map((_, i) => Array.isArray(d.programmi[String(i)]) ? d.programmi[String(i)] : (Array.isArray(d.programmi[i]) ? d.programmi[i] : []));
+        }
+        // Assicura che la lunghezza corrisponda ai giorni
+        while (programmi.length < giorni.length) programmi.push([]);
       }
     } else {
-      setDoc(doc(db, 'impostazioni', 'config'), { gruppi: dati.gruppi, giorni: dati.giorni, programmi: dati.programmi });
+      setDoc(doc(db, 'impostazioni', 'config'), { gruppi, giorni, programmi });
     }
+    configPronta = true;
     aggiornaSelect();
     renderProgramma();
   });
@@ -382,19 +379,19 @@ function avviaFirebase() {
 
 function aggiornaSelect() {
   const gSel = document.getElementById('giorno-select');
-  const old = gSel.value;
-  // Evidenzia giorno di oggi
-  const giornoOggi = new Date().getDay(); // 0=dom, 1=lun...
-  const mapGiorni = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4 };
-  const idxOggi = mapGiorni[giornoOggi];
-  gSel.innerHTML = dati.giorni.map((g,i) => `<option value="${i}">${g}${i === idxOggi ? ' ★ oggi' : ''}</option>`).join('');
-  if (old !== "" && parseInt(old) < dati.giorni.length) gSel.value = old;
-  else if (idxOggi !== undefined && idxOggi < dati.giorni.length) gSel.value = idxOggi;
-  document.getElementById('b-gruppo').innerHTML = dati.gruppi.map(g => `<option>${g}</option>`).join('');
-  document.getElementById('msg-dest').innerHTML = '<option>Tutti</option>' + dati.gruppi.map(g => `<option>${g}</option>`).join('');
-  const filterRow = document.getElementById('filter-row');
-  filterRow.innerHTML = `<div class="filter-chip ${currentFilter==='tutti'?'active':''}" onclick="setFilter('tutti')">Tutti</div>` +
-    dati.gruppi.map(g => `<div class="filter-chip ${currentFilter===g?'active':''}" onclick="setFilter('${g}')">${g}</div>`).join('');
+  const old = parseInt(gSel.value);
+  const mapGiorni = {1:0,2:1,3:2,4:3,5:4};
+  const idxOggi = mapGiorni[new Date().getDay()];
+  gSel.innerHTML = giorni.map((g,i) => `<option value="${i}">${g}${i===idxOggi?' ★ oggi':''}</option>`).join('');
+  if (!isNaN(old) && old < giorni.length) gSel.value = old;
+  else if (idxOggi !== undefined && idxOggi < giorni.length) gSel.value = idxOggi;
+  else gSel.value = 0;
+
+  document.getElementById('b-gruppo').innerHTML = gruppi.map(g => `<option>${g}</option>`).join('');
+  document.getElementById('msg-dest').innerHTML = '<option>Tutti</option>' + gruppi.map(g => `<option>${g}</option>`).join('');
+  document.getElementById('filter-row').innerHTML =
+    `<div class="filter-chip ${currentFilter==='tutti'?'active':''}" onclick="setFilter('tutti')">Tutti</div>` +
+    gruppi.map(g => `<div class="filter-chip ${currentFilter===g?'active':''}" onclick="setFilter('${g}')">${g}</div>`).join('');
 }
 
 window.toggleEgg = (show) => document.getElementById('easter-egg').classList.toggle('show', show);
@@ -406,8 +403,7 @@ window.showTab = (name, el) => {
   el.classList.add('active');
   if (name === 'programma') renderProgramma();
   if (name === 'comunicazioni') {
-    // Segna avvisi come visti
-    avvisiVistiCount = dati.avvisi.length;
+    avvisiVistiCount = avvisi.length;
     localStorage.setItem('grest_avvisi_visti', avvisiVistiCount);
     document.getElementById('badge-avvisi').classList.remove('show');
   }
@@ -416,19 +412,13 @@ window.showTab = (name, el) => {
 window.setFilter = (f) => { currentFilter = f; aggiornaSelect(); renderBambini(); };
 
 function renderDashboard() {
-  document.getElementById('dash-tot').textContent = dati.bambini.length;
-  document.getElementById('dash-presenti').textContent = dati.bambini.filter(b => b.presente).length;
-
-  // Taglie
-  ['S','M','L','XL'].forEach(t => {
-    document.getElementById('t-'+t).textContent = dati.bambini.filter(b => b.taglia === t).length;
-  });
-
-  document.getElementById('dash-avvisi-list').innerHTML = dati.avvisi.length
-    ? dati.avvisi.slice(0,3).map(a => `<div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--gray-100)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:5px;flex-shrink:0"></div><div><b style="font-size:13px">${a.titolo}</b>: ${(a.testo||'').substring(0,40)}...<div style="font-size:11px;color:gray">${a.data||''}</div></div></div>`).join('')
+  document.getElementById('dash-tot').textContent = bambini.length;
+  document.getElementById('dash-presenti').textContent = bambini.filter(b => b.presente).length;
+  ['S','M','L','XL'].forEach(t => { document.getElementById('t-'+t).textContent = bambini.filter(b => b.taglia === t).length; });
+  document.getElementById('dash-avvisi-list').innerHTML = avvisi.length
+    ? avvisi.slice(0,3).map(a => `<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:5px;flex-shrink:0"></div><div><b style="font-size:13px">${a.titolo}</b>: ${(a.testo||'').substring(0,40)}...<div style="font-size:11px;color:gray">${a.data||''}</div></div></div>`).join('')
     : '<div class="vuoto">Nessun avviso</div>';
-
-  const conAllergie = dati.bambini.filter(b => b.allergie && b.allergie.trim());
+  const conAllergie = bambini.filter(b => b.allergie && b.allergie.trim());
   document.getElementById('dash-allergie-list').innerHTML = conAllergie.length
     ? conAllergie.map(b => `<div style="display:flex;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid var(--gray-100)"><div class="avatar" style="width:28px;height:28px;font-size:11px">${b.nome[0]}</div><div><b style="font-size:13px">${b.nome}</b><div style="color:#dc2626;font-size:11px;font-weight:700">⚠️ ${b.allergie}</div></div></div>`).join('')
     : '<div class="vuoto">Nessuna allergia segnalata</div>';
@@ -436,16 +426,16 @@ function renderDashboard() {
 
 function renderBambini() {
   const q = (document.getElementById('search-input')?.value || '').toLowerCase();
-  const html = dati.bambini.map(b => {
+  const html = bambini.map(b => {
     if (!b.nome.toLowerCase().includes(q)) return '';
     if (currentFilter !== 'tutti' && b.gruppo !== currentFilter) return '';
-    let dataDisplay = b.nascita ? b.nascita.split('-').reverse().join('/') : "";
+    const data = b.nascita ? b.nascita.split('-').reverse().join('/') : '';
     return `<div class="bambino-card ${b.presente?'presente':''}">
       <input type="checkbox" class="checkbox-presenza" ${b.presente?'checked':''} onchange="togglePresenza('${b.id}',this.checked)">
       <div class="avatar">${b.nome[0]}</div>
       <div style="flex:1">
         <b>${b.nome}</b><br>
-        <small style="color:var(--gray-500)">${dataDisplay}${b.classe?' · '+b.classe:''}</small>
+        <small style="color:var(--gray-500)">${data}${b.classe?' · '+b.classe:''}</small>
         ${b.allergie?`<div style="color:#dc2626;font-size:11px;font-weight:700;display:flex;align-items:center;gap:3px;margin-top:2px"><i class="ti ti-alert-triangle"></i> ${b.allergie}</div>`:''}
         ${b.telefono?`<div style="font-size:11px;color:var(--gray-500)">📞 ${b.telefono}</div>`:''}
         ${b.codiceFamiglia?`<div style="font-size:10px;color:var(--gray-400)">🔑 ${b.codiceFamiglia}</div>`:''}
@@ -462,18 +452,18 @@ function renderBambini() {
 }
 
 window.renderProgramma = () => {
-  const dayIdx = parseInt(document.getElementById('giorno-select').value) || 0;
-  const lista = (dati.programmi[dayIdx]) || [];
+  if (!configPronta) return;
+  const dayIdx = parseInt(document.getElementById('giorno-select').value);
+  if (isNaN(dayIdx)) return;
+  const lista = programmi[dayIdx] || [];
   const sorted = [...lista].sort((a,b) => (a.orario||'').localeCompare(b.orario||''));
-  // Orario attuale per evidenziare attività in corso
   const now = new Date();
   const oraOggi = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-  const giornoOggi = new Date().getDay();
-  const mapGiorni = {1:0,2:1,3:2,4:3,5:4};
-  const isOggi = mapGiorni[giornoOggi] === dayIdx;
+  const idxOggi = {1:0,2:1,3:2,4:3,5:4}[now.getDay()];
+  const isOggi = idxOggi === dayIdx;
   document.getElementById('lista-attivita').innerHTML = sorted.length
-    ? sorted.map((a,i) => {
-        const inCorso = isOggi && a.orario <= oraOggi;
+    ? sorted.map((a, i) => {
+        const inCorso = isOggi && (a.orario||'') <= oraOggi;
         return `<div class="attivita-card ${inCorso?'oggi':''}">
           <div style="font-size:13px;font-weight:700;color:var(--blue);min-width:40px">${a.orario||''}${inCorso?'<div style="font-size:9px;color:var(--gold);font-weight:700">ORA</div>':''}</div>
           <div class="vert-line ${a.colore||'line-blu'}"></div>
@@ -485,13 +475,14 @@ window.renderProgramma = () => {
 };
 
 function renderAvvisi() {
-  document.getElementById('lista-avvisi').innerHTML = dati.avvisi.length
-    ? dati.avvisi.map(a => `<div class="avviso-card">
+  // Usa indice numerico per eliminazione sicura
+  document.getElementById('lista-avvisi').innerHTML = avvisi.length
+    ? avvisi.map((a, idx) => `<div class="avviso-card">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:5px">
           <b>${a.titolo}</b>
           <div style="display:flex;gap:6px;align-items:center">
             <span style="font-size:10px;color:var(--gray-500)">${a.data||''}</span>
-            <button onclick="eliminaAvviso('${a.id}')" style="color:var(--red);font-size:11px;border:none;background:none;cursor:pointer;font-weight:700">✕</button>
+            <button onclick="eliminaAvviso(${idx})" style="color:var(--red);font-size:14px;border:none;background:none;cursor:pointer;font-weight:700;padding:2px 6px">✕</button>
           </div>
         </div>
         <p style="font-size:13px;color:var(--gray-700);margin-bottom:6px;line-height:1.45">${a.testo}</p>
@@ -503,30 +494,11 @@ function renderAvvisi() {
 window.resetPresenze = async () => {
   if (!confirm("Azzerare tutte le presenze di oggi?")) return;
   const batch = writeBatch(db);
-  dati.bambini.forEach(b => {
-    if (b.presente) batch.update(doc(db, 'bambini', b.id), { presente: false });
-  });
+  bambini.forEach(b => { if (b.presente) batch.update(doc(db, 'bambini', b.id), { presente: false }); });
   await batch.commit();
 };
 
-window.esportaCSV = () => {
-  const header = ['Nome','Data Nascita','Gruppo','Classe','Taglia','Telefono','Allergie','Indirizzo','Settimane','Codice Famiglia'];
-  const righe = dati.bambini.map(b => [
-    b.nome||'', b.nascita||'', b.gruppo||'', b.classe||'', b.taglia||'',
-    b.telefono||'', b.allergie||'', b.indirizzo||'',
-    (b.settimane||[]).join(';'), b.codiceFamiglia||''
-  ].map(v => `"${v}"`).join(','));
-  const csv = [header.join(','), ...righe].join('\n');
-  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'bambini-grest2026.csv';
-  a.click(); URL.revokeObjectURL(url);
-};
-
-window.togglePresenza = async (id, val) => {
-  await updateDoc(doc(db, 'bambini', id), { presente: val });
-};
+window.togglePresenza = async (id, val) => { await updateDoc(doc(db, 'bambini', id), { presente: val }); };
 
 window.salvaBambino = async () => {
   const nome = document.getElementById('b-nome').value.trim();
@@ -553,11 +525,12 @@ window.salvaAttivita = async () => {
   const orario = document.getElementById('att-orario').value;
   const nome = document.getElementById('att-nome-input').value.trim();
   if (!nome) { alert("Inserisci il nome dell'attività!"); return; }
-  const dayIdx = parseInt(document.getElementById('giorno-select').value) || 0;
-  const lista = dati.programmi[dayIdx] || [];
+  const dayIdx = parseInt(document.getElementById('giorno-select').value);
+  const lista = programmi[dayIdx] || [];
   const colore = COLORI[lista.length % COLORI.length];
-  const nuoviProgrammi = dati.programmi.map((p,i) => i === dayIdx ? [...(p||[]), { orario, nome, det: document.getElementById('att-det-input').value.trim(), colore }] : (p||[]));
-  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: dati.gruppi, giorni: dati.giorni, programmi: nuoviProgrammi }, { merge: true });
+  // Costruisci array completo programmi aggiornato
+  const nuoviProgrammi = programmi.map((p, i) => i === dayIdx ? [...(p||[]), { orario, nome, det: document.getElementById('att-det-input').value.trim(), colore }] : (p||[]));
+  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi, giorni, programmi: nuoviProgrammi }, { merge: true });
   document.getElementById('att-nome-input').value = '';
   document.getElementById('att-det-input').value = '';
   document.getElementById('att-orario').value = '09:00';
@@ -565,8 +538,8 @@ window.salvaAttivita = async () => {
 };
 
 window.eliminaAttivita = async (dayIdx, i) => {
-  const nuovi = dati.programmi.map((p,idx) => idx === dayIdx ? (p||[]).filter((_,j) => j !== i) : (p||[]));
-  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: dati.gruppi, giorni: dati.giorni, programmi: nuovi }, { merge: true });
+  const nuovi = programmi.map((p, idx) => idx === dayIdx ? (p||[]).filter((_,j) => j !== i) : (p||[]));
+  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi, giorni, programmi: nuovi }, { merge: true });
 };
 
 window.inviaAvviso = async () => {
@@ -581,9 +554,18 @@ window.inviaAvviso = async () => {
   document.getElementById('msg-testo-input').value = '';
 };
 
+// Elimina avviso per indice (sicuro, usa l'id reale dall'array avvisi)
+window.eliminaAvviso = async (idx) => {
+  const avviso = avvisi[idx];
+  if (!avviso || !avviso.id) { alert("Avviso non trovato"); return; }
+  if (confirm("Eliminare questo avviso?")) {
+    await deleteDoc(doc(db, 'avvisi', avviso.id));
+  }
+};
+
 window.apriModifica = (id) => {
   bambinoIdInModifica = id;
-  const b = dati.bambini.find(x => x.id === id);
+  const b = bambini.find(x => x.id === id);
   if (!b) return;
   document.getElementById('m-nome').value = b.nome||'';
   document.getElementById('m-nascita').value = b.nascita||'';
@@ -592,7 +574,7 @@ window.apriModifica = (id) => {
   document.getElementById('m-taglia').value = b.taglia||'';
   document.getElementById('m-telefono').value = b.telefono||'';
   document.getElementById('m-allergie').value = b.allergie||'';
-  document.getElementById('m-gruppo').innerHTML = dati.gruppi.map(g=>`<option ${g===b.gruppo?'selected':''}>${g}</option>`).join('');
+  document.getElementById('m-gruppo').innerHTML = gruppi.map(g=>`<option ${g===b.gruppo?'selected':''}>${g}</option>`).join('');
   [1,2,3,4,5].forEach(n => document.getElementById('m-sett'+n).checked = b.settimane && b.settimane.includes(n));
   document.getElementById('modal-modifica').classList.add('show');
 };
@@ -618,14 +600,10 @@ window.eliminaBambino = async (id) => {
   if (confirm("Eliminare definitivamente?")) await deleteDoc(doc(db, 'bambini', id));
 };
 
-window.eliminaAvviso = async (id) => {
-  if (confirm("Eliminare questo avviso?")) await deleteDoc(doc(db, 'avvisi', id));
-};
-
 window.apriImpostazioni = () => {
-  settGruppiTemp = [...dati.gruppi];
-  settGiorniTemp = [...dati.giorni];
-  settProgrammiTemp = dati.programmi.map(p => [...(p||[])]);
+  settGruppiTemp = [...gruppi];
+  settGiorniTemp = [...giorni];
+  settProgrammiTemp = programmi.map(p => [...(p||[])]);
   document.getElementById('sett-pwd-nuova').value = '';
   renderSettGruppi(); renderSettGiorni();
   document.getElementById('modal-impostazioni').classList.add('show');
@@ -648,10 +626,7 @@ window.aggiungiGiorno = () => { settGiorniTemp.push("Nuovo Giorno"); settProgram
 
 window.salvaImpostazioni = async () => {
   const nuovaPwd = document.getElementById('sett-pwd-nuova').value.trim();
-  if (nuovaPwd.length > 0) {
-    passwordCorrente = nuovaPwd;
-    localStorage.setItem('grest_pwd', nuovaPwd);
-  }
+  if (nuovaPwd.length > 0) { passwordCorrente = nuovaPwd; localStorage.setItem('grest_pwd', nuovaPwd); }
   await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: settGruppiTemp, giorni: settGiorniTemp, programmi: settProgrammiTemp });
   chiudiModal('modal-impostazioni');
 };
