@@ -11,8 +11,8 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --blue: #1a4fa3; --blue-dark: #153d80; --blue-light: #dbeafe; --blue-text: #1e40af;
-    --gold: #d97706; --gold-light: #fef3c7; --green: #16a34a; --green-light: #dcfce7;
-    --red: #dc2626; --red-light: #fee2e2; --purple: #7c3aed; --purple-light: #ede9fe;
+    --gold: #d97706; --gold-light: #fef3c7; --green: #16a34a;
+    --red: #dc2626; --red-light: #fee2e2; --purple: #7c3aed;
     --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-400: #9ca3af; --gray-500: #6b7280;
     --gray-700: #374151; --gray-900: #111827;
     --radius: 10px; --radius-lg: 14px; --shadow: 0 1px 3px rgba(0,0,0,0.08);
@@ -41,7 +41,7 @@
   .bambino-card { background: white; border-radius: var(--radius-lg); padding: 0.7rem 0.85rem; margin-bottom: 0.55rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
   .bambino-card.presente { border-left: 5px solid var(--green); background: #f0fff4; }
   .attivita-card { background: white; border-radius: var(--radius-lg); padding: 0.7rem 0.85rem; margin-bottom: 0.55rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
-  .attivita-card.oggi { border-left: 4px solid var(--gold); background: #fffbeb; }
+  .attivita-card.ora { border-left: 4px solid var(--gold); background: #fffbeb; }
   .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; background: var(--blue-light); color: var(--blue-text); flex-shrink: 0; }
   .badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; background: var(--gray-200); }
   .btn-primary { background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
@@ -70,7 +70,6 @@
   .pwd-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #1a4fa3, #153d80); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 2rem; }
   .pwd-box { background: white; border-radius: 20px; padding: 2rem; width: 100%; max-width: 340px; text-align: center; }
   .pwd-title { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
-  .pwd-sub { font-size: 13px; color: var(--gray-500); margin-bottom: 20px; }
   #easter-egg { display: none; position: fixed; inset: 0; background: white; z-index: 99999; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: 'Nunito', sans-serif; }
   #easter-egg.show { display: flex; }
   .close-egg { position: absolute; top: 20px; left: 20px; font-size: 30px; cursor: pointer; color: black; border: none; background: none; }
@@ -80,14 +79,14 @@
 
 <div id="easter-egg">
   <button class="close-egg" onclick="toggleEgg(false)">✕</button>
-  <h1 style="font-size: 50px; color: rgb(60, 4, 97); font-weight: 900; padding: 20px;">Grest 2026 ✝</h1>
+  <h1 style="font-size:50px; color:rgb(60,4,97); font-weight:900; padding:20px;">Grest 2026 ✝</h1>
 </div>
 
 <div class="pwd-screen" id="pwd-screen">
   <div class="pwd-box">
     <div style="font-size:40px; margin-bottom:10px">✝</div>
     <div class="pwd-title">GREST 2026</div>
-    <div class="pwd-sub">Area Animatori</div>
+    <p style="font-size:13px; color:var(--gray-500); margin-bottom:20px">Area Animatori</p>
     <input type="password" id="pwd-input" class="form-input" placeholder="Password" onkeydown="if(event.key==='Enter') verificaPwd()">
     <button class="btn-primary" style="width:100%; justify-content:center" onclick="verificaPwd()">Entra</button>
     <div id="pwd-error" style="color:var(--red); font-size:12px; margin-top:8px; display:none">Password errata</div>
@@ -131,7 +130,7 @@
         <div id="dash-avvisi-list"><div class="loading">Caricamento...</div></div>
       </div>
       <div class="card">
-        <div class="card-title"><i class="ti ti-alert-triangle" style="color:var(--red)"></i> Allergie / Note mediche</div>
+        <div class="card-title"><i class="ti ti-alert-triangle" style="color:var(--red)"></i> Allergie</div>
         <div id="dash-allergie-list"><div class="loading">Caricamento...</div></div>
       </div>
       <button class="btn-danger" style="width:100%; justify-content:center; margin-bottom:0.75rem" onclick="resetPresenze()">
@@ -201,7 +200,7 @@
       <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett4"> Settimana 4</label>
       <label style="font-size:13px; display:flex; align-items:center; gap:4px"><input type="checkbox" id="b-sett5"> Settimana 5</label>
     </div>
-    <label style="font-size:12px; font-weight:700; color:var(--red)">Eventuali Allergie / Note Mediche</label>
+    <label style="font-size:12px; font-weight:700; color:var(--red)">Allergie / Note Mediche</label>
     <textarea id="b-allergie" placeholder="Es: Celiachia o lascia vuoto" class="form-input" style="height:60px"></textarea>
     <div style="display:flex; gap:10px; margin-top:10px">
       <button class="btn-primary" style="flex:1" onclick="salvaBambino()">Salva</button>
@@ -284,7 +283,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy, where, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const COLORI = ["line-blu", "line-oro", "line-verde"];
 let passwordCorrente = localStorage.getItem('grest_pwd') || "grest2026";
@@ -301,17 +300,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Stato globale
 let bambini = [];
 let avvisi = [];
+let attivita = []; // tutte le attività del programma
 let gruppi = ["Generale"];
 let giorni = ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"];
-let programmi = [[],[],[],[],[]];
 let currentFilter = 'tutti';
 let bambinoIdInModifica = null;
-let settGruppiTemp = [], settGiorniTemp = [], settProgrammiTemp = [];
+let settGruppiTemp = [], settGiorniTemp = [];
 let avvisiVistiCount = parseInt(localStorage.getItem('grest_avvisi_visti') || '0');
-let configPronta = false;
 
 window.verificaPwd = () => {
   const val = document.getElementById('pwd-input').value;
@@ -341,7 +338,7 @@ function avviaFirebase() {
     renderDashboard();
   });
 
-  // Avvisi — ordinati per timestamp
+  // Avvisi
   onSnapshot(query(collection(db, 'avvisi'), orderBy('timestamp', 'desc')), snap => {
     avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAvvisi();
@@ -352,46 +349,44 @@ function avviaFirebase() {
     else { badge.classList.remove('show'); }
   });
 
-  // Impostazioni (config con giorni, gruppi, programmi)
+  // Programma: ogni attività è un documento separato con campo "giorno" (stringa)
+  // Questo evita il problema degli array annidati su Firestore
+  onSnapshot(query(collection(db, 'programma'), orderBy('orario', 'asc')), snap => {
+    attivita = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderProgramma();
+  });
+
+  // Impostazioni (solo gruppi e giorni, NON il programma)
   onSnapshot(doc(db, 'impostazioni', 'config'), snap => {
     if (snap.exists()) {
       const d = snap.data();
       if (d.gruppi && d.gruppi.length) gruppi = d.gruppi;
       if (d.giorni && d.giorni.length) giorni = d.giorni;
-      if (d.programmi) {
-        // Normalizza: può essere array o oggetto {0:[...], 1:[...]}
-        if (Array.isArray(d.programmi)) {
-          programmi = d.programmi.map(p => Array.isArray(p) ? p : []);
-        } else {
-          programmi = giorni.map((_, i) => Array.isArray(d.programmi[String(i)]) ? d.programmi[String(i)] : (Array.isArray(d.programmi[i]) ? d.programmi[i] : []));
-        }
-        // Assicura che la lunghezza corrisponda ai giorni
-        while (programmi.length < giorni.length) programmi.push([]);
-      }
     } else {
-      setDoc(doc(db, 'impostazioni', 'config'), { gruppi, giorni, programmi });
+      setDoc(doc(db, 'impostazioni', 'config'), { gruppi, giorni });
     }
-    configPronta = true;
     aggiornaSelect();
-    renderProgramma();
   });
 }
 
 function aggiornaSelect() {
   const gSel = document.getElementById('giorno-select');
-  const old = parseInt(gSel.value);
+  const old = gSel.value;
   const mapGiorni = {1:0,2:1,3:2,4:3,5:4};
   const idxOggi = mapGiorni[new Date().getDay()];
-  gSel.innerHTML = giorni.map((g,i) => `<option value="${i}">${g}${i===idxOggi?' ★ oggi':''}</option>`).join('');
-  if (!isNaN(old) && old < giorni.length) gSel.value = old;
-  else if (idxOggi !== undefined && idxOggi < giorni.length) gSel.value = idxOggi;
-  else gSel.value = 0;
+  gSel.innerHTML = giorni.map((g,i) => `<option value="${g}">${g}${i===idxOggi?' ★ oggi':''}</option>`).join('');
+  // Ripristina selezione precedente o metti oggi
+  if (old && giorni.includes(old)) gSel.value = old;
+  else if (idxOggi !== undefined && idxOggi < giorni.length) gSel.value = giorni[idxOggi];
+  else gSel.value = giorni[0];
 
   document.getElementById('b-gruppo').innerHTML = gruppi.map(g => `<option>${g}</option>`).join('');
   document.getElementById('msg-dest').innerHTML = '<option>Tutti</option>' + gruppi.map(g => `<option>${g}</option>`).join('');
   document.getElementById('filter-row').innerHTML =
     `<div class="filter-chip ${currentFilter==='tutti'?'active':''}" onclick="setFilter('tutti')">Tutti</div>` +
     gruppi.map(g => `<div class="filter-chip ${currentFilter===g?'active':''}" onclick="setFilter('${g}')">${g}</div>`).join('');
+
+  renderProgramma();
 }
 
 window.toggleEgg = (show) => document.getElementById('easter-egg').classList.toggle('show', show);
@@ -436,7 +431,7 @@ function renderBambini() {
       <div style="flex:1">
         <b>${b.nome}</b><br>
         <small style="color:var(--gray-500)">${data}${b.classe?' · '+b.classe:''}</small>
-        ${b.allergie?`<div style="color:#dc2626;font-size:11px;font-weight:700;display:flex;align-items:center;gap:3px;margin-top:2px"><i class="ti ti-alert-triangle"></i> ${b.allergie}</div>`:''}
+        ${b.allergie?`<div class="allergy-warning"><i class="ti ti-alert-triangle"></i> ${b.allergie}</div>`:''}
         ${b.telefono?`<div style="font-size:11px;color:var(--gray-500)">📞 ${b.telefono}</div>`:''}
         ${b.codiceFamiglia?`<div style="font-size:10px;color:var(--gray-400)">🔑 ${b.codiceFamiglia}</div>`:''}
       </div>
@@ -452,30 +447,29 @@ function renderBambini() {
 }
 
 window.renderProgramma = () => {
-  if (!configPronta) return;
-  const dayIdx = parseInt(document.getElementById('giorno-select').value);
-  if (isNaN(dayIdx)) return;
-  const lista = programmi[dayIdx] || [];
-  const sorted = [...lista].sort((a,b) => (a.orario||'').localeCompare(b.orario||''));
+  const giornoSel = document.getElementById('giorno-select').value;
+  if (!giornoSel) return;
+  // Filtra attività per il giorno selezionato
+  const lista = attivita.filter(a => a.giorno === giornoSel).sort((a,b) => (a.orario||'').localeCompare(b.orario||''));
   const now = new Date();
   const oraOggi = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-  const idxOggi = {1:0,2:1,3:2,4:3,5:4}[now.getDay()];
-  const isOggi = idxOggi === dayIdx;
-  document.getElementById('lista-attivita').innerHTML = sorted.length
-    ? sorted.map((a, i) => {
+  const mapGiorni = {1:0,2:1,3:2,4:3,5:4};
+  const idxOggi = mapGiorni[now.getDay()];
+  const isOggi = idxOggi !== undefined && giorni[idxOggi] === giornoSel;
+  document.getElementById('lista-attivita').innerHTML = lista.length
+    ? lista.map(a => {
         const inCorso = isOggi && (a.orario||'') <= oraOggi;
-        return `<div class="attivita-card ${inCorso?'oggi':''}">
+        return `<div class="attivita-card ${inCorso?'ora':''}">
           <div style="font-size:13px;font-weight:700;color:var(--blue);min-width:40px">${a.orario||''}${inCorso?'<div style="font-size:9px;color:var(--gold);font-weight:700">ORA</div>':''}</div>
           <div class="vert-line ${a.colore||'line-blu'}"></div>
           <div style="flex:1"><b>${a.nome||''}</b><br><small style="color:var(--gray-500)">${a.det||''}</small></div>
-          <button onclick="eliminaAttivita(${dayIdx},${i})" style="color:red;border:none;background:none;cursor:pointer;padding:5px;font-size:18px">✕</button>
+          <button onclick="eliminaAttivita('${a.id}')" style="color:red;border:none;background:none;cursor:pointer;padding:5px;font-size:18px">✕</button>
         </div>`;
       }).join('')
     : '<div class="vuoto">Nessuna attività. Aggiungine una con +</div>';
 };
 
 function renderAvvisi() {
-  // Usa indice numerico per eliminazione sicura
   document.getElementById('lista-avvisi').innerHTML = avvisi.length
     ? avvisi.map((a, idx) => `<div class="avviso-card">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:5px">
@@ -521,25 +515,30 @@ window.salvaBambino = async () => {
   chiudiModal('modal-bambino');
 };
 
+// PROGRAMMA: salva ogni attività come documento separato con campo "giorno"
 window.salvaAttivita = async () => {
   const orario = document.getElementById('att-orario').value;
   const nome = document.getElementById('att-nome-input').value.trim();
   if (!nome) { alert("Inserisci il nome dell'attività!"); return; }
-  const dayIdx = parseInt(document.getElementById('giorno-select').value);
-  const lista = programmi[dayIdx] || [];
-  const colore = COLORI[lista.length % COLORI.length];
-  // Costruisci array completo programmi aggiornato
-  const nuoviProgrammi = programmi.map((p, i) => i === dayIdx ? [...(p||[]), { orario, nome, det: document.getElementById('att-det-input').value.trim(), colore }] : (p||[]));
-  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi, giorni, programmi: nuoviProgrammi }, { merge: true });
+  const giornoSel = document.getElementById('giorno-select').value;
+  const attivitaGiorno = attivita.filter(a => a.giorno === giornoSel);
+  const colore = COLORI[attivitaGiorno.length % COLORI.length];
+  // Salva come documento nella collezione "programma"
+  await addDoc(collection(db, 'programma'), {
+    giorno: giornoSel,
+    orario,
+    nome,
+    det: document.getElementById('att-det-input').value.trim(),
+    colore
+  });
   document.getElementById('att-nome-input').value = '';
   document.getElementById('att-det-input').value = '';
   document.getElementById('att-orario').value = '09:00';
   chiudiModal('modal-attivita');
 };
 
-window.eliminaAttivita = async (dayIdx, i) => {
-  const nuovi = programmi.map((p, idx) => idx === dayIdx ? (p||[]).filter((_,j) => j !== i) : (p||[]));
-  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi, giorni, programmi: nuovi }, { merge: true });
+window.eliminaAttivita = async (id) => {
+  await deleteDoc(doc(db, 'programma', id));
 };
 
 window.inviaAvviso = async () => {
@@ -554,13 +553,10 @@ window.inviaAvviso = async () => {
   document.getElementById('msg-testo-input').value = '';
 };
 
-// Elimina avviso per indice (sicuro, usa l'id reale dall'array avvisi)
 window.eliminaAvviso = async (idx) => {
-  const avviso = avvisi[idx];
-  if (!avviso || !avviso.id) { alert("Avviso non trovato"); return; }
-  if (confirm("Eliminare questo avviso?")) {
-    await deleteDoc(doc(db, 'avvisi', avviso.id));
-  }
+  const a = avvisi[idx];
+  if (!a?.id) return;
+  if (confirm("Eliminare questo avviso?")) await deleteDoc(doc(db, 'avvisi', a.id));
 };
 
 window.apriModifica = (id) => {
@@ -603,7 +599,6 @@ window.eliminaBambino = async (id) => {
 window.apriImpostazioni = () => {
   settGruppiTemp = [...gruppi];
   settGiorniTemp = [...giorni];
-  settProgrammiTemp = programmi.map(p => [...(p||[])]);
   document.getElementById('sett-pwd-nuova').value = '';
   renderSettGruppi(); renderSettGiorni();
   document.getElementById('modal-impostazioni').classList.add('show');
@@ -617,17 +612,17 @@ window.renderSettGruppi = () => {
 
 window.renderSettGiorni = () => {
   document.getElementById('sett-giorni-list').innerHTML = settGiorniTemp.map((g,i) =>
-    `<div style="display:flex;gap:5px;margin-bottom:5px"><input type="text" value="${g}" onchange="settGiorniTemp[${i}]=this.value" class="form-input" style="margin:0"><button onclick="settGiorniTemp.splice(${i},1);settProgrammiTemp.splice(${i},1);renderSettGiorni()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:8px;padding:5px 10px;cursor:pointer">✕</button></div>`
+    `<div style="display:flex;gap:5px;margin-bottom:5px"><input type="text" value="${g}" onchange="settGiorniTemp[${i}]=this.value" class="form-input" style="margin:0"><button onclick="settGiorniTemp.splice(${i},1);renderSettGiorni()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:8px;padding:5px 10px;cursor:pointer">✕</button></div>`
   ).join('');
 };
 
 window.aggiungiGruppo = () => { settGruppiTemp.push("Nuovo Gruppo"); renderSettGruppi(); };
-window.aggiungiGiorno = () => { settGiorniTemp.push("Nuovo Giorno"); settProgrammiTemp.push([]); renderSettGiorni(); };
+window.aggiungiGiorno = () => { settGiorniTemp.push("Nuovo Giorno"); renderSettGiorni(); };
 
 window.salvaImpostazioni = async () => {
   const nuovaPwd = document.getElementById('sett-pwd-nuova').value.trim();
   if (nuovaPwd.length > 0) { passwordCorrente = nuovaPwd; localStorage.setItem('grest_pwd', nuovaPwd); }
-  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: settGruppiTemp, giorni: settGiorniTemp, programmi: settProgrammiTemp });
+  await setDoc(doc(db, 'impostazioni', 'config'), { gruppi: settGruppiTemp, giorni: settGiorniTemp });
   chiudiModal('modal-impostazioni');
 };
 
