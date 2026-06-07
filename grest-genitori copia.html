@@ -207,7 +207,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, where, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBLsK6_odHquTHAUy3xDSI1pqic940zUdI",
@@ -224,12 +224,11 @@ const db = getFirestore(app);
 let codiceFamiglia = null;
 let bambini = [];
 let avvisi = [];
+let attivita = [];
 let gruppi = ["Generale"];
 let giorni = ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"];
-let programmi = [[],[],[],[],[]];
 let bambinoIdInModifica = null;
 let unsubBambini = null;
-let configPronta = false;
 
 // Easter egg
 let countClicks = 0, lastClickTime = 0;
@@ -274,23 +273,19 @@ function avviaConCodice(codice) {
     document.getElementById('dash-navvisi').textContent = avvisi.length;
   });
 
+  // Programma dalla collezione dedicata
+  onSnapshot(query(collection(db, 'programma'), orderBy('orario', 'asc')), snap => {
+    attivita = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderProgramma();
+  });
+
   onSnapshot(doc(db, 'impostazioni', 'config'), snap => {
     if (snap.exists()) {
       const d = snap.data();
       if (d.gruppi && d.gruppi.length) gruppi = d.gruppi;
       if (d.giorni && d.giorni.length) giorni = d.giorni;
-      if (d.programmi) {
-        if (Array.isArray(d.programmi)) {
-          programmi = d.programmi.map(p => Array.isArray(p) ? p : []);
-        } else {
-          programmi = giorni.map((_, i) => Array.isArray(d.programmi[String(i)]) ? d.programmi[String(i)] : (Array.isArray(d.programmi[i]) ? d.programmi[i] : []));
-        }
-        while (programmi.length < giorni.length) programmi.push([]);
-      }
     }
-    configPronta = true;
     aggiornaSelect();
-    renderProgramma();
   });
 }
 
@@ -300,14 +295,15 @@ window.cambiaCodice = () => {
 
 function aggiornaSelect() {
   const gSel = document.getElementById('giorno-select');
-  const old = parseInt(gSel.value);
+  const old = gSel.value;
   const mapGiorni = {1:0,2:1,3:2,4:3,5:4};
   const idxOggi = mapGiorni[new Date().getDay()];
-  gSel.innerHTML = giorni.map((g,i) => `<option value="${i}">${g}${i===idxOggi?' ★ oggi':''}</option>`).join('');
-  if (!isNaN(old) && old < giorni.length) gSel.value = old;
-  else if (idxOggi !== undefined && idxOggi < giorni.length) gSel.value = idxOggi;
-  else gSel.value = 0;
+  gSel.innerHTML = giorni.map((g,i) => `<option value="${g}">${g}${i===idxOggi?' ★ oggi':''}</option>`).join('');
+  if (old && giorni.includes(old)) gSel.value = old;
+  else if (idxOggi !== undefined && idxOggi < giorni.length) gSel.value = giorni[idxOggi];
+  else gSel.value = giorni[0];
   document.getElementById('b-gruppo').innerHTML = gruppi.map(g => `<option>${g}</option>`).join('');
+  renderProgramma();
 }
 
 window.showTab = (name, el) => {
@@ -336,13 +332,11 @@ function renderBambini() {
 }
 
 window.renderProgramma = () => {
-  if (!configPronta) return;
-  const dayIdx = parseInt(document.getElementById('giorno-select').value);
-  if (isNaN(dayIdx)) return;
-  const lista = programmi[dayIdx] || [];
-  const sorted = [...lista].sort((a,b) => (a.orario||'').localeCompare(b.orario||''));
-  document.getElementById('lista-attivita').innerHTML = sorted.length
-    ? sorted.map(a => `<div class="attivita-card">
+  const giornoSel = document.getElementById('giorno-select').value;
+  if (!giornoSel) return;
+  const lista = attivita.filter(a => a.giorno === giornoSel).sort((a,b) => (a.orario||'').localeCompare(b.orario||''));
+  document.getElementById('lista-attivita').innerHTML = lista.length
+    ? lista.map(a => `<div class="attivita-card">
         <div style="font-size:12px;font-weight:700;color:var(--blue);min-width:38px">${a.orario||''}</div>
         <div class="vert-line ${a.colore||'line-blu'}"></div>
         <div style="flex:1"><b style="font-size:13px">${a.nome||''}</b><br><small style="color:var(--gray-500)">${a.det||''}</small></div>
