@@ -36,7 +36,6 @@
   .badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; background: var(--gray-200); }
   .badge-avviso { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; background: var(--gold-light); color: var(--gold); }
   .btn-primary { background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-  .btn-secondary { background: var(--gray-200); color: var(--gray-700); border: none; border-radius: var(--radius); padding: 0.55rem 0.85rem; font-size: 13px; font-weight: 700; cursor: pointer; }
   .form-input { width: 100%; padding: 0.5rem 0.75rem; border: 1.5px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 0.8rem; font-family: inherit; font-size: 14px; }
   .form-input:focus { outline: none; border-color: var(--blue); }
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
@@ -55,7 +54,6 @@
   .stat-value { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 700; color: var(--blue); }
   .vuoto { text-align: center; padding: 16px; color: var(--gray-400); font-size: 13px; }
   .loading { text-align: center; padding: 30px; color: var(--gray-400); font-size: 13px; }
-  /* Schermata codice famiglia */
   .codice-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #1a4fa3, #153d80); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 2rem; }
   .codice-box { background: white; border-radius: 20px; padding: 2rem; width: 100%; max-width: 340px; text-align: center; }
   .codice-title { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
@@ -70,10 +68,9 @@
 
 <div id="easter-egg">
   <button class="close-egg" onclick="toggleEgg(false)">✕</button>
-  <h1 style="font-size: 50px; color: rgb(60, 4, 97); font-weight: 900; padding: 20px;">Grest</h1>
+  <h1 style="font-size: 50px; color: rgb(60, 4, 97); font-weight: 900; padding: 20px;">Grest 2026 ✝</h1>
 </div>
 
-<!-- SCHERMATA CODICE FAMIGLIA -->
 <div class="codice-screen" id="codice-screen">
   <div class="codice-box">
     <div style="font-size:40px; margin-bottom:10px">✝</div>
@@ -132,7 +129,6 @@
   </div>
 </div>
 
-<!-- MODAL AGGIUNGI -->
 <div class="modal-overlay" id="modal-bambino">
   <div class="modal">
     <h2 style="margin-bottom:15px">🧒 Iscrivi un Bambino</h2>
@@ -171,7 +167,6 @@
   </div>
 </div>
 
-<!-- MODAL MODIFICA -->
 <div class="modal-overlay" id="modal-modifica">
   <div class="modal">
     <h2 style="margin-bottom:15px">✏️ Modifica Bambino</h2>
@@ -227,9 +222,14 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let codiceFamiglia = null;
-let dati = { bambini: [], avvisi: [], gruppi: ["Generale"], giorni: ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"], programmi: [[],[],[],[],[]] };
+let bambini = [];
+let avvisi = [];
+let gruppi = ["Generale"];
+let giorni = ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"];
+let programmi = [[],[],[],[],[]];
 let bambinoIdInModifica = null;
 let unsubBambini = null;
+let configPronta = false;
 
 // Easter egg
 let countClicks = 0, lastClickTime = 0;
@@ -241,18 +241,12 @@ document.getElementById('logo-icon').addEventListener('click', () => {
 });
 window.toggleEgg = (show) => document.getElementById('easter-egg').classList.toggle('show', show);
 
-// Controlla se c'è già un codice salvato
-const codicesSalvato = localStorage.getItem('grest_codice_famiglia');
-if (codicesSalvato) {
-  avviaConCodice(codicesSalvato);
-}
+const codiceSalvato = localStorage.getItem('grest_codice_famiglia');
+if (codiceSalvato) avviaConCodice(codiceSalvato);
 
 window.accediConCodice = () => {
   const val = document.getElementById('codice-input').value.trim();
-  if (val.length < 4) {
-    document.getElementById('codice-error').style.display = 'block';
-    return;
-  }
+  if (val.length < 4) { document.getElementById('codice-error').style.display = 'block'; return; }
   localStorage.setItem('grest_codice_famiglia', val);
   avviaConCodice(val);
 };
@@ -264,54 +258,56 @@ function avviaConCodice(codice) {
   document.getElementById('badge-codice').textContent = '🔑 ' + codice;
   document.getElementById('badge-codice-testo').textContent = codice;
 
-  // Ascolta SOLO i bambini di questa famiglia
   if (unsubBambini) unsubBambini();
   unsubBambini = onSnapshot(
     query(collection(db, 'bambini'), where('codiceFamiglia', '==', codiceFamiglia)),
     snap => {
-      dati.bambini = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      bambini = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       renderBambini();
-      document.getElementById('dash-miei').textContent = dati.bambini.length;
+      document.getElementById('dash-miei').textContent = bambini.length;
     }
   );
 
-  // Ascolta avvisi (tutti, sono comunicazioni pubbliche)
   onSnapshot(query(collection(db, 'avvisi'), orderBy('timestamp', 'desc')), snap => {
-    dati.avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    avvisi = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAvvisi();
-    document.getElementById('dash-navvisi').textContent = dati.avvisi.length;
+    document.getElementById('dash-navvisi').textContent = avvisi.length;
   });
 
-  // Ascolta impostazioni
   onSnapshot(doc(db, 'impostazioni', 'config'), snap => {
     if (snap.exists()) {
       const d = snap.data();
-      if (d.gruppi) dati.gruppi = d.gruppi;
-      if (d.giorni) dati.giorni = d.giorni;
-      if (d.programmi) dati.programmi = d.programmi;
-      aggiornaSelect();
-      renderProgramma();
+      if (d.gruppi && d.gruppi.length) gruppi = d.gruppi;
+      if (d.giorni && d.giorni.length) giorni = d.giorni;
+      if (d.programmi) {
+        if (Array.isArray(d.programmi)) {
+          programmi = d.programmi.map(p => Array.isArray(p) ? p : []);
+        } else {
+          programmi = giorni.map((_, i) => Array.isArray(d.programmi[String(i)]) ? d.programmi[String(i)] : (Array.isArray(d.programmi[i]) ? d.programmi[i] : []));
+        }
+        while (programmi.length < giorni.length) programmi.push([]);
+      }
     }
+    configPronta = true;
+    aggiornaSelect();
+    renderProgramma();
   });
 }
 
 window.cambiaCodice = () => {
-  if (confirm("Vuoi cambiare codice famiglia? Perderai la vista dei bambini attuali finché non reinserisci il codice corretto.")) {
-    localStorage.removeItem('grest_codice_famiglia');
-    location.reload();
-  }
+  if (confirm("Vuoi cambiare codice famiglia?")) { localStorage.removeItem('grest_codice_famiglia'); location.reload(); }
 };
 
 function aggiornaSelect() {
   const gSel = document.getElementById('giorno-select');
-  const old = gSel.value;
-  const giornoOggi = new Date().getDay();
+  const old = parseInt(gSel.value);
   const mapGiorni = {1:0,2:1,3:2,4:3,5:4};
-  const idxOggi = mapGiorni[giornoOggi];
-  gSel.innerHTML = dati.giorni.map((g,i) => `<option value="${i}">${g}${i === idxOggi ? ' ★ oggi' : ''}</option>`).join('');
-  if (old && old < dati.giorni.length) gSel.value = old;
-  else if (idxOggi !== undefined && idxOggi < dati.giorni.length) gSel.value = idxOggi;
-  document.getElementById('b-gruppo').innerHTML = dati.gruppi.map(g => `<option>${g}</option>`).join('');
+  const idxOggi = mapGiorni[new Date().getDay()];
+  gSel.innerHTML = giorni.map((g,i) => `<option value="${i}">${g}${i===idxOggi?' ★ oggi':''}</option>`).join('');
+  if (!isNaN(old) && old < giorni.length) gSel.value = old;
+  else if (idxOggi !== undefined && idxOggi < giorni.length) gSel.value = idxOggi;
+  else gSel.value = 0;
+  document.getElementById('b-gruppo').innerHTML = gruppi.map(g => `<option>${g}</option>`).join('');
 }
 
 window.showTab = (name, el) => {
@@ -322,14 +318,14 @@ window.showTab = (name, el) => {
 };
 
 function renderBambini() {
-  const html = dati.bambini.map(b => {
-    let dataDisplay = b.nascita ? b.nascita.split('-').reverse().join('/') : "";
+  const html = bambini.map(b => {
+    const data = b.nascita ? b.nascita.split('-').reverse().join('/') : '';
     return `<div class="bambino-card">
       <div class="avatar">${b.nome[0]}</div>
       <div style="flex:1">
         <b>${b.nome}</b><br>
-        <small style="color:var(--gray-500)">${dataDisplay}${b.classe ? ' · '+b.classe : ''}</small>
-        ${b.allergie ? `<div class="allergy-warning"><i class="ti ti-alert-triangle"></i> ${b.allergie}</div>` : ''}
+        <small style="color:var(--gray-500)">${data}${b.classe?' · '+b.classe:''}</small>
+        ${b.allergie?`<div class="allergy-warning"><i class="ti ti-alert-triangle"></i> ${b.allergie}</div>`:''}
       </div>
       <span class="badge">${b.gruppo||''}</span>
       <button onclick="apriModifica('${b.id}')" style="color:var(--blue);border:none;background:none;cursor:pointer;padding:5px;font-size:16px">✏️</button>
@@ -340,17 +336,23 @@ function renderBambini() {
 }
 
 window.renderProgramma = () => {
-  const dayIdx = document.getElementById('giorno-select').value;
-  const lista = dati.programmi[dayIdx] || [];
-  const sorted = [...lista].sort((a,b) => a.orario.localeCompare(b.orario));
+  if (!configPronta) return;
+  const dayIdx = parseInt(document.getElementById('giorno-select').value);
+  if (isNaN(dayIdx)) return;
+  const lista = programmi[dayIdx] || [];
+  const sorted = [...lista].sort((a,b) => (a.orario||'').localeCompare(b.orario||''));
   document.getElementById('lista-attivita').innerHTML = sorted.length
-    ? sorted.map(a => `<div class="attivita-card"><div style="font-size:12px;font-weight:700;color:var(--blue);min-width:38px">${a.orario}</div><div class="vert-line ${a.colore}"></div><div style="flex:1"><b style="font-size:13px">${a.nome}</b><br><small style="color:var(--gray-500)">${a.det}</small></div></div>`).join('')
+    ? sorted.map(a => `<div class="attivita-card">
+        <div style="font-size:12px;font-weight:700;color:var(--blue);min-width:38px">${a.orario||''}</div>
+        <div class="vert-line ${a.colore||'line-blu'}"></div>
+        <div style="flex:1"><b style="font-size:13px">${a.nome||''}</b><br><small style="color:var(--gray-500)">${a.det||''}</small></div>
+      </div>`).join('')
     : '<div class="vuoto">Nessuna attività per questo giorno</div>';
 };
 
 function renderAvvisi() {
-  document.getElementById('lista-avvisi').innerHTML = dati.avvisi.length
-    ? dati.avvisi.map(a => `<div class="avviso-banner">
+  document.getElementById('lista-avvisi').innerHTML = avvisi.length
+    ? avvisi.map(a => `<div class="avviso-banner">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
           <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:14px">🔔 ${a.titolo}</div>
           <span style="font-size:10px;color:var(--gray-500);white-space:nowrap">${a.data||''}</span>
@@ -367,22 +369,19 @@ window.salvaBambino = async () => {
   if (!nome || !nascita) { alert("Nome e Data di nascita sono obbligatori!"); return; }
   const settimane = [1,2,3,4,5].filter(n => document.getElementById('b-sett'+n).checked);
   await addDoc(collection(db, 'bambini'), {
-    nome, nascita,
-    gruppo: document.getElementById('b-gruppo').value,
+    nome, nascita, gruppo: document.getElementById('b-gruppo').value,
     allergie: document.getElementById('b-allergie').value.trim(),
     indirizzo: document.getElementById('b-indirizzo').value.trim(),
     classe: document.getElementById('b-classe').value.trim(),
     taglia: document.getElementById('b-taglia').value,
     telefono: document.getElementById('b-telefono').value.trim(),
-    settimane, presente: false,
-    codiceFamiglia: codiceFamiglia
+    settimane, presente: false, codiceFamiglia
   });
   ['b-nome','b-allergie','b-indirizzo','b-classe','b-telefono'].forEach(id => document.getElementById(id).value='');
   document.getElementById('b-nascita').value=''; document.getElementById('b-nascita').type='text';
   document.getElementById('b-taglia').value='';
   [1,2,3,4,5].forEach(n => document.getElementById('b-sett'+n).checked=false);
   chiudiModal('modal-bambino');
-  // Mostra conferma
   const conf = document.createElement('div');
   conf.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#16a34a;color:white;padding:12px 24px;border-radius:99px;font-weight:700;font-size:14px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.2)';
   conf.textContent = '✅ Iscrizione ricevuta!';
@@ -392,7 +391,7 @@ window.salvaBambino = async () => {
 
 window.apriModifica = (id) => {
   bambinoIdInModifica = id;
-  const b = dati.bambini.find(x => x.id === id);
+  const b = bambini.find(x => x.id === id);
   if (!b) return;
   document.getElementById('m-nome').value = b.nome||'';
   document.getElementById('m-nascita').value = b.nascita||'';
@@ -401,7 +400,7 @@ window.apriModifica = (id) => {
   document.getElementById('m-taglia').value = b.taglia||'';
   document.getElementById('m-telefono').value = b.telefono||'';
   document.getElementById('m-allergie').value = b.allergie||'';
-  document.getElementById('m-gruppo').innerHTML = dati.gruppi.map(g=>`<option ${g===b.gruppo?'selected':''}>${g}</option>`).join('');
+  document.getElementById('m-gruppo').innerHTML = gruppi.map(g=>`<option ${g===b.gruppo?'selected':''}>${g}</option>`).join('');
   [1,2,3,4,5].forEach(n => document.getElementById('m-sett'+n).checked = b.settimane && b.settimane.includes(n));
   document.getElementById('modal-modifica').classList.add('show');
 };
@@ -413,22 +412,18 @@ window.salvaModifica = async () => {
   if (!nome || !nascita) { alert("Nome e Data di nascita sono obbligatori!"); return; }
   const settimane = [1,2,3,4,5].filter(n => document.getElementById('m-sett'+n).checked);
   await updateDoc(doc(db, 'bambini', bambinoIdInModifica), {
-    nome, nascita,
-    gruppo: document.getElementById('m-gruppo').value,
+    nome, nascita, gruppo: document.getElementById('m-gruppo').value,
     indirizzo: document.getElementById('m-indirizzo').value.trim(),
     classe: document.getElementById('m-classe').value.trim(),
     taglia: document.getElementById('m-taglia').value,
     telefono: document.getElementById('m-telefono').value.trim(),
-    allergie: document.getElementById('m-allergie').value.trim(),
-    settimane
+    allergie: document.getElementById('m-allergie').value.trim(), settimane
   });
   chiudiModal('modal-modifica');
 };
 
 window.eliminaBambino = async (id) => {
-  if (confirm("Vuoi rimuovere questa iscrizione?")) {
-    await deleteDoc(doc(db, 'bambini', id));
-  }
+  if (confirm("Vuoi rimuovere questa iscrizione?")) await deleteDoc(doc(db, 'bambini', id));
 };
 
 window.chiudiModal = (id) => document.getElementById(id).classList.remove('show');
